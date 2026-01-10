@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use App\Repository\TweetsRepository;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Impl\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TweetsRepository::class)]
-class Tweets
+class Tweets extends BaseEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

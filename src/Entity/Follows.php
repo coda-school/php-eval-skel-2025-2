@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\FollowsRepository;
+use App\Entity\Impl\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FollowsRepository::class)]
-class Follows
+class Follows extends BaseEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

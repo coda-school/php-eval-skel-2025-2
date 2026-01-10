@@ -35,8 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(type: Types::GUID)]
-    private ?string $uid = null;
 
     #[ORM\Column(length: 30)]
     private ?string $username = null;
@@ -120,18 +118,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
-    }
-
-    public function getUid(): ?string
-    {
-        return $this->uid;
-    }
-
-    public function setUid(string $uid): static
-    {
-        $this->uid = $uid;
-
-        return $this;
     }
 
     public function getUsername(): ?string
