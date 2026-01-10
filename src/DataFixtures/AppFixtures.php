@@ -30,47 +30,43 @@ class AppFixtures extends Fixture
         $this->generatedTweets = [];
 
         // 1. Génération des Users
-        $names = ["Alice", "Bob", "Charlie", "JN", "Clemence", "Titi", "Toto", "Tata", "Tutu", "Tyty"];
-        foreach ($names as $name) {
-            $this->generatedUsers[] = $this->generateUser($name, strtolower($name) . "@coda.fr", strtolower($name));
-        }
+        $this->generatedUsers[] = $this->generateUser("Alice", "alice@coda.fr", "alice");
+        $this->generatedUsers[] = $this->generateUser("Bob", "bob@coda.fr", "bob");
 
         // 2. Génération des Tweets (avec lien vers auteur aléatoire)
-        $messages = [
-            "Enfin le week-end, direction la plage ! 🏖️",
-            "Quelqu'un a une solution pour l'erreur 500 sur Symfony ? 😅",
-            "Le nouveau projet avance super vite, j'adore l'architecture.",
-            "Incroyable le dernier épisode de la série, j'en reviens pas ! 😱",
-            "Petit café matinal en travaillant sur mes fixtures. ☕",
-            "Est-ce que PHP est vraiment mort ? Je ne crois pas ! 🐘",
-            "Rappel : n'oubliez pas de commit vos changements régulièrement.",
-            "La météo est parfaite aujourd'hui pour aller courir. 🏃‍♂️",
-            "Je cherche un bon resto sur Paris, des recommandations ? 🍕",
-            "Une journée productive se termine. Demain sera encore mieux !",
-            "Apprendre le TypeScript après le PHP, c'est un vrai défi.",
-            "Qui d'autre utilise Docker pour ses projets locaux ? 🐳",
-            "Vraiment hâte de partir en vacances le mois prochain... ✈️",
-            "Mon chat vient de marcher sur mon clavier, adieu mon code. 🐈",
-            "Le design pattern Strategy est vraiment élégant dans ce cas.",
-            "Un grand merci à la communauté Stack Overflow, comme toujours.",
-            "Sensation géniale quand ton test unitaire passe au vert ! ✅",
-            "Charlot le beau gosse !!",
-            "Soirée gaming entre potes ce soir, ça va être épique ! 🎮",
-            "C'est enfin l'heure de la pause déjeuner. Bon appétit ! 🍱"
-        ];
+        $this->generatedTweets[] = $this->generateTweets("Vacances");
+        $this->generatedTweets[] = $this->generateTweets("Colloc");
+        $this->generatedTweets[] = $this->generateTweets("Montagne");
 
-        foreach ($messages as $msg) {
-            $this->generatedTweets[] = $this->generateTweets($msg);
-        }
+        // $messages = [
+        //            "Enfin le week-end, direction la plage ! 🏖️",
+        //            "Quelqu'un a une solution pour l'erreur 500 sur Symfony ? 😅",
+        //            "Le nouveau projet avance super vite, j'adore l'architecture.",
+        //            "Incroyable le dernier épisode de la série, j'en reviens pas ! 😱",
+        //            "Petit café matinal en travaillant sur mes fixtures. ☕",
+        //            "Est-ce que PHP est vraiment mort ? Je ne crois pas ! 🐘",
+        //            "Rappel : n'oubliez pas de commit vos changements régulièrement.",
+        //            "La météo est parfaite aujourd'hui pour aller courir. 🏃‍♂️",
+        //            "Je cherche un bon resto sur Paris, des recommandations ? 🍕",
+        //            "Une journée productive se termine. Demain sera encore mieux !",
+        //            "Apprendre le TypeScript après le PHP, c'est un vrai défi.",
+        //            "Qui d'autre utilise Docker pour ses projets locaux ? 🐳",
+        //            "Vraiment hâte de partir en vacances le mois prochain... ✈️",
+        //            "Mon chat vient de marcher sur mon clavier, adieu mon code. 🐈",
+        //            "Le design pattern Strategy est vraiment élégant dans ce cas.",
+        //            "Un grand merci à la communauté Stack Overflow, comme toujours.",
+        //            "Sensation géniale quand ton test unitaire passe au vert ! ✅",
+        //            "Charlot le beau gosse !!",
+        //            "Soirée gaming entre potes ce soir, ça va être épique ! 🎮",
+        //            "C'est enfin l'heure de la pause déjeuner. Bon appétit ! 🍱"
+        //        ];
 
         // 3. Génération des liens Follows (Optionnel)
         foreach ($this->generatedUsers as $user) {
             $this->generateFollows($user);
         }
-
         $this->manager->flush();
     }
-
     // Méthode pour générer un Tweet lié à un User aléatoire
     public function generateTweets(string $message): Tweets
     {
@@ -95,9 +91,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
-
         $user->setPassword($this->hasher->hashPassword($user, $password));
-        $user->setRoles(['ROLE_USER']);
 
         $this->manager->persist($user);
         // Optionnel : ne pas faire de flush ici, le laisser à la fin du load()
