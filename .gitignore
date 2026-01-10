@@ -15,3 +15,4 @@
 ###< symfony/asset-mapper ###
 
 .DS_Store
+.idea/
