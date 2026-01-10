@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '_layouts/standard.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
@@ -15,6 +15,7 @@
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
+        <button type="submit" class="btn">S'inscrire</button>
+    <a href="{{ path('login') }}">Vous avez déjà un compte?Connectez-vous!</a>
     {{ form_end(registrationForm) }}
 {% endblock %}
