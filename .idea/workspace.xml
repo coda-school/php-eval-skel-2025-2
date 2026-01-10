@@ -17,6 +17,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Jean-Nicolas21"
+  }
+}]]></component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/coda-school/php-eval-skel-2025-2.git",
@@ -161,7 +167,7 @@
       <workItem from="1767951738112" duration="256000" />
       <workItem from="1767952012861" duration="1776000" />
       <workItem from="1768036583278" duration="7999000" />
-      <workItem from="1768045120808" duration="1229000" />
+      <workItem from="1768045120808" duration="3842000" />
     </task>
     <task id="LOCAL-00001" summary="fix: ajout du squelette">
       <option name="closed" value="true" />
