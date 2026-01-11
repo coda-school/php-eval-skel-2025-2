@@ -1,15 +1,17 @@
 {# messages flashes #}
-<div>
+<div class="flash-wrapper">
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            {% set alertClass = (label == 'error') ? 'danger' : label %}
+            {% set alertClass = (label == 'error' or label == 'danger') ? 'danger' : (label == 'success' ? 'success' : 'info') %}
 
-            <div class="alert alert-{{ alertClass }}" role="alert">
-                {% if alertClass == 'success' %} ✅
-                {% elseif alertClass == 'danger' %} ⚠️
-                {% else %}  {% endif %}
-
-                {{ message|raw }}
+            <div class="alert alert-{{ alertClass }} alert-anim" role="alert">
+                <span class="alert-icon">
+                    {% if alertClass == 'success' %}✅
+                    {% elseif alertClass == 'danger' %}⚠️
+                    {% else %}ℹ️{% endif %}
+                </span>
+                <span class="alert-text">{{ message|raw }}</span>
+                <button type="button" class="alert-close" onclick="this.parentElement.remove()">×</button>
             </div>
         {% endfor %}
     {% endfor %}

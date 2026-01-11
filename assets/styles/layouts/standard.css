@@ -238,3 +238,132 @@ body {
     from { transform: perspective(1000px) rotateX(50deg) translateY(0); }
     to { transform: perspective(1000px) rotateX(50deg) translateY(100px); }
 }
+
+/* 6. STYLE FORMULAIRE REGISTER */
+.y-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    text-align: left; /* On aligne le texte à gauche pour les labels/erreurs */
+}
+
+/* Style des Inputs */
+.y-form input[type="text"],
+.y-form input[type="email"],
+.y-form input[type="password"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.y-form input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* Checkbox Terms */
+.form-terms {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* --- FORMULAIRE & ÉLÉMENTS DE STATUT --- */
+
+/* Erreurs Symfony sous les champs (Register) */
+.y-form ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.2rem 0 0 0;
+    color: #ef4444;
+    font-size: 0.85rem;
+}
+
+.form-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.link-muted {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.link-muted:hover { color: var(--primary-green); }
+
+.user-status {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+}
+
+.user-status a {
+    color: var(--primary-green);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Accessibilité */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* --- 7. SYSTÈME DE FLASH MESSAGES (Version Finale) --- */
+.flash-wrapper {
+    position: fixed;
+    top: 5.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    pointer-events: none;
+}
+
+.alert {
+    pointer-events: auto;
+    background: var(--white);
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    border-left: 4px solid #ccc;
+    animation: alert-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.alert-danger {
+    border-left-color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.05);
+    color: #991b1b;
+}
+
+.alert-success {
+    border-left-color: var(--primary-green);
+    background-color: rgba(16, 185, 129, 0.05);
+    color: #065f46;
+}
+
+@keyframes alert-in {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
