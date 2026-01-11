@@ -18,7 +18,7 @@ class Tweets extends BaseEntity
     #[ORM\Column(type: Types::GUID, unique: true)]
     private ?string $uid = null;
 
-    #[ORM\Column(length: 500)]
+    #[ORM\Column(length: 280)]
     private ?string $message = null;
 
     #[ORM\Column(length: 1024, nullable: true)]
