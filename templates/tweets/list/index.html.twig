@@ -5,4 +5,10 @@
 {% block content %}
     {{ form_start(form) }}
     {{ form_end(form) }}
+
+    {% for tweet in tweets %}
+                    <p>
+                        {{ tweet.message }}
+                    </p>
+    {% endfor %}
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Follows;
+use App\Entity\Tweets;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,18 @@ class FollowsRepository extends ServiceEntityRepository
         parent::__construct($registry, Follows::class);
     }
 
-    //    /**
-    //     * @return Follows[] Returns an array of Follows objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findTweetsForUserFromUsersFollowed(User $user): array
+    {
+        return $this
+            ->createQueryBuilder('f')
+            ->select('t')
+            ->innerJoin(User::class, 'u', 'WITH', 'f.createdBy = u.id AND u.id = :userId')
+            ->innerJoin(Tweets::class, 't', 'WITH', 'f.followed = t.createdBy AND t.isDeleted = false')
+            ->andWhere('f.isDeleted = false')
+            ->setParameter('userId', $user->getId())
+            ->orderBy('f.createdDate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Follows
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

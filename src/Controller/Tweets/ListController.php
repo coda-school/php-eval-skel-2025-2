@@ -4,7 +4,8 @@ namespace App\Controller\Tweets;
 
 use App\DTO\TweetDTO;
 use App\Form\TweetType;
-use App\Service\TweetService;
+use App\Service\FollowsService;
+use App\Service\TweetsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +15,9 @@ final class ListController extends AbstractController
 {
     #[Route('/tweets', name: 'tweets_list', methods: ['GET', 'POST'])]
     public function index(
-        Request $request,
-        TweetService $tweetService,
+        Request       $request,
+        TweetsService $tweetService,
+        FollowsService  $followsService
     ): Response
     {
         $tweetDTO = new TweetDTO();
@@ -33,7 +35,7 @@ final class ListController extends AbstractController
 
             $tweet = null;
             try {
-                // traitements métier pour créer le tweet via le service TweetService
+                // traitements métier pour créer le tweet via le service TweetsService
                 $tweet = $tweetService->createTweet($tweetDTO, $this->getUser());
             } catch (\Exception $e) {
                 // en cas d'erreur, ajout d'un message flash pour indiquer l'erreur
@@ -50,9 +52,14 @@ final class ListController extends AbstractController
             return $this->redirectToRoute('tweets_list');
         }
 
+        $connectedUser = $this->getUser();
+
+        $tweets = $followsService->findTweetsForUserFromUsersFollowed($connectedUser);
+
 
         return $this->render('tweets/list/index.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'tweets' => $tweets,
         ]);
     }
 }
