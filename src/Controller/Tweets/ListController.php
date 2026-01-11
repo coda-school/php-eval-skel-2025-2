@@ -53,12 +53,15 @@ final class ListController extends AbstractController
 
         $connectedUser = $this->getUser();
 
-        $tweets = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser);
+        $tweetsFollowed = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser);
+
+        $top5Tweets = $tweetsService->findTop5LikeTweets();
 
 
         return $this->render('tweets/list/index.html.twig', [
             'form' => $form,
-            'tweets' => $tweets,
+            'tweets' => $tweetsFollowed,
+            'top5Tweets' => $top5Tweets,
         ]);
     }
 }

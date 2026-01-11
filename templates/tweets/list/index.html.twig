@@ -6,6 +6,8 @@
     {{ form_start(form) }}
     {{ form_end(form) }}
 
+    <h1>Thread</h1>
+
     {% for tweet in tweets %}
                     <p>
                         {{ tweet.authorName }}
@@ -13,5 +15,16 @@
                         {{ tweet.createdDate|date('d/m/H:i')}}
                         {{ tweet.totalLikes }} likes
                     </p>
+    {% endfor %}
+
+    <h1>Tendances</h1>
+
+    {% for tweet in top5Tweets %}
+        <p>
+            {{ tweet.authorName }}
+            {{ tweet.message }}
+            {{ tweet.createdDate|date('d/m/H:i')}}
+            {{ tweet.totalLikes }} likes
+        </p>
     {% endfor %}
 {% endblock %}

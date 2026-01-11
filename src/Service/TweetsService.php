@@ -36,4 +36,8 @@ class TweetsService
         return $this->tweetsRepository->findTweetsForUserFromUsersFollowed($user);
     }
 
+    public function findTop5LikeTweets(): array {
+        return $this->tweetsRepository->findTop5LikeTweets();
+    }
+
 }

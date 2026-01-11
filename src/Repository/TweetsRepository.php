@@ -21,7 +21,7 @@ class TweetsRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'COUNT(l.id) as totalLikes', 'u.username as authorName', 't.message as message', 't.createdDate as createdDate')
+            ->select('t', 'u.username as authorName', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet')
@@ -33,6 +33,22 @@ class TweetsRepository extends ServiceEntityRepository
             ->setParameter('userId', $user->getId())
             ->getQuery()
             ->getResult();
+    }
+
+    public function findTop5LikeTweets(): array {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t', 'u.username as authorName', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->innerJoin('t.createdBy', 'u')
+            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet')
+            ->andWhere('t.isDeleted = false')
+            ->andWhere('l.isDeleted = false')
+            ->groupBy('t.id', 'u.username')
+            ->orderBy('totalLikes', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
     }
 
 }
