@@ -32,21 +32,21 @@ class AppFixtures extends Fixture
 
         // 1. Génération des Users
         $usersData = [
-            ["Alice", "alice@coda.fr", "alice"],
-            ["Bob", "bob@coda.fr", "bob"],
-            ["Charlie", "charlie@coda.fr", "charlie"],
-            ["JN", "jn@coda.fr", "jn"],
-            ["Clémence", "clemence@coda.fr", "clemence"],
-            ["Titi", "titi@coda.fr", "titi"],
-            ["Toto", "toto@coda.fr", "toto"],
-            ["Tutu", "tutu@coda.fr", "tutu"],
-            ["Tyty", "tyty@coda.fr", "tyty"],
-            ["tata", "tata@coda.fr", "tata"],
-            ["Tete", "tete@coda.fr", "tete"],
+            ["Alice", "alice@coda.fr", "alice", "Passionnée de design et de café. ☕ Toujours en quête du pixel parfait."],
+            ["Bob", "bob@coda.fr", "bob", "Fan de littérature classique et de nouvelles technologies. 📚✨"],
+            ["Charlie", "charlie@coda.fr", "charlie", "Toujours la tête dans les nuages... ou dans le Cloud. ☁️ Architecte infra."],
+            ["JN", "jn@coda.fr", "jn", "Expert en cybersécurité. J'aime comprendre comment les choses se cassent."],
+            ["Clémence", "clemence@coda.fr", "clemence", "Développeur Symfony le jour, gamer la nuit. 🎮 Code is life."],
+            ["Titi", "titi@coda.fr", "titi", "Petit mais costaud ! Amateur de crossfit et de cuisine saine. 🍎"],
+            ["Toto", "toto@coda.fr", "toto", "Le roi des blagues (pas toujours drôles). Je vis pour faire rire."],
+            ["Tutu", "tutu@coda.fr", "tutu", "Danseuse étoile dans l'âme, développeuse Front-end dans la vraie vie. 🩰"],
+            ["Tyty", "tyty@coda.fr", "tyty", "Discret mais efficace. Grand amateur de philosophie et de thé vert."],
+            ["tata", "tata@coda.fr", "tata", "La tante préférée du réseau ! Je partage mes meilleures recettes de gâteaux. 🍰"],
+            ["Tete", "tete@coda.fr", "tete", "Globe-trotteur et photographe amateur. 📸 Le monde est mon terrain de jeu."],
         ];
 
         foreach ($usersData as $data) {
-            $this->generatedUsers[] = $this->generateUser($data[0], $data[1], $data[2]);
+            $this->generatedUsers[] = $this->generateUser($data[0], $data[1], $data[2], $data[3]);
         }
 
         // 2. Génération des Tweets
@@ -88,13 +88,14 @@ class AppFixtures extends Fixture
         $this->manager->flush();
     }
 
-    private function generateUser(string $username, string $email, string $password): User
+    private function generateUser(string $username, string $email, string $password, string $bio): User
     {
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
+        $user->setBio($bio);
         $user->setPassword($this->hasher->hashPassword($user, $password));
-        $user->setRoles(['ROLE_USER']); // Important pour le login
+        $user->setRoles(['ROLE_USER']);
 
         $this->manager->persist($user);
         return $user;
@@ -109,7 +110,7 @@ class AppFixtures extends Fixture
         $author = $this->generatedUsers[array_rand($this->generatedUsers)];
         $tweet->setCreatedBy($author);
         $tweet->setCreatedDate(new \DateTime());
-        $tweet->setIsDeleted(false); // Champ souvent requis dans BaseEntity
+        $tweet->setIsDeleted(false);
 
         $this->manager->persist($tweet);
         return $tweet;
