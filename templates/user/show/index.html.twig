@@ -4,10 +4,20 @@
 
 {% block content %}
 
+    <h1>Mes informations</h1>
+
     <p>{{ app.user.username }}</p>
     <p>{{ app.user.email }}</p>
     <p>{{ app.user.bio }}</p>
 
-
+    <h1>Mes tweets</h1>
+    {% for tweet in tweets %}
+        <p>
+            {{ tweet.authorName }}
+            {{ tweet.message }}
+            {{ tweet.createdDate|date('d/m/H:i')}}
+            {{ tweet.totalLikes }} likes
+        </p>
+    {% endfor %}
 
 {% endblock %}
