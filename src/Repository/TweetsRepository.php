@@ -17,22 +17,36 @@ class TweetsRepository extends ServiceEntityRepository
         parent::__construct($registry, Tweets::class);
     }
 
-    public function findTweetsForUserFromUsersFollowed(User $user): array
+    public function findTweetsForUserFromUsersFollowed(User $user, int $page, int $limit): array
     {
         return $this
             ->createQueryBuilder('t')
             ->select('t', 'u.username as authorName', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId')
-            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet')
+            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('f.isDeleted = false')
             ->andWhere('t.isDeleted = false')
-            ->andWhere('l.isDeleted = false')
             ->groupBy('t.id', 'u.username')
             ->orderBy('t.createdDate', 'DESC')
             ->setParameter('userId', $user->getId())
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    public function nbTotalTweetsForUserFromUsersFollowed(User $user): int
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->innerJoin(Follows::class, 'f', 'WITH', 't.createdBy = f.followed AND f.isDeleted = false')
+            ->andWhere('t.isDeleted = false')
+            ->andWhere('f.createdBy = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function findTop5LikeTweets(): array {

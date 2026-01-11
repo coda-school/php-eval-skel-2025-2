@@ -9,13 +9,22 @@
     <h1>Thread</h1>
 
     {% for tweet in tweets %}
-                    <p>
-                        {{ tweet.authorName }}
-                        {{ tweet.message }}
-                        {{ tweet.createdDate|date('d/m/H:i')}}
-                        {{ tweet.totalLikes }} likes
-                    </p>
+        <p>
+            {{ tweet.authorName }}
+            {{ tweet.message }}
+            {{ tweet.createdDate|date('d/m/H:i')}}
+            {{ tweet.totalLikes }} likes
+        </p>
     {% endfor %}
+
+    <div>
+        {% for i in 1..maxPaginationPage %}
+        <a class="pagination-link {% if page == i %}active{% endif %}"
+           href="{{ path("tweets_list") }}?page={{ i }}&limit={{ limit }}">
+            {{ i }}
+        </a>
+        {% endfor %}
+    </div>
 
     <h1>Tendances</h1>
 

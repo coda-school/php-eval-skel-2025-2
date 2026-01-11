@@ -3,11 +3,13 @@
 namespace App\Controller\Tweets;
 
 use App\DTO\TweetDTO;
+use App\Entity\User;
 use App\Form\TweetType;
 use App\Service\TweetsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ListController extends AbstractController
@@ -16,7 +18,9 @@ final class ListController extends AbstractController
     public function index(
         Request       $request,
         TweetsService $tweetService,
-        TweetsService $tweetsService
+        TweetsService $tweetsService,
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter] int $limit = 5
     ): Response
     {
         $tweetDTO = new TweetDTO();
@@ -53,7 +57,17 @@ final class ListController extends AbstractController
 
         $connectedUser = $this->getUser();
 
-        $tweetsFollowed = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser);
+        $tweetsFollowed = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser, $page, $limit);
+
+        $ndTotalTweets = $tweetService->nbTotalTweetsForUserFromUsersFollowed($connectedUser);
+
+        echo $ndTotalTweets;
+
+        if ($ndTotalTweets <= $limit) {
+            $maxPaginationPage = 1;
+        } else {
+            $maxPaginationPage = ceil($ndTotalTweets / $limit);
+        }
 
         $top5Tweets = $tweetsService->findTop5LikeTweets();
 
@@ -62,6 +76,9 @@ final class ListController extends AbstractController
             'form' => $form,
             'tweets' => $tweetsFollowed,
             'top5Tweets' => $top5Tweets,
+            'limit' => $limit,
+            'page' => $page,
+            'maxPaginationPage' => $maxPaginationPage
         ]);
     }
 }
