@@ -1,39 +1,66 @@
 {% extends '_layouts/standard.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion | Y{% endblock %}
 
-{% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+{% block content %}
+    <section class="home-card">
+        <h1 class="home-title">Connexion</h1>
+        <p class="home-tagline">Heureux de vous revoir sur Y.</p>
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+        <form method="post" class="y-form">
+            {% if error %}
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-text">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </span>
+                </div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="user-status">
+                    Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>,
+                    <a href="{{ logout_path() }}">Se déconnecter</a>
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="username" class="visually-hidden">Email</label>
+                <input type="email"
+                       value="{{ last_username }}"
+                       name="_username"
+                       id="username"
+                       class="form-control"
+                       placeholder="Email"
+                       autocomplete="email"
+                       required
+                       autofocus>
             </div>
-        {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
+            <div class="form-group">
+                <label for="password" class="visually-hidden">Mot de passe</label>
+                <input type="password"
+                       name="_password"
+                       id="password"
+                       class="form-control"
+                       placeholder="Mot de passe"
+                       autocomplete="current-password"
+                       required>
             </div>
-        #}
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Se connecter
-        </button>
-        <a href="{{ path('register') }}">Vous n'avez pas de compte?Inscrivez-vous!</a>
-    </form>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="home-actions">
+                <button class="btn btn-solid" type="submit">
+                    Se connecter
+                </button>
+            </div>
+
+            <div class="form-footer">
+                <a href="{{ path('register') }}" class="link-muted">
+                    Pas encore de compte ? Rejoignez le chaos
+                </a>
+            </div>
+        </form>
+    </section>
 {% endblock %}
