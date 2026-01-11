@@ -14,6 +14,16 @@ class UserService
     {
     }
 
+    public function getUserInformations(User $user): array {
+        return $this->userRepository->getUserInformations($user);
+    }
 
+    public function findUsersIFollow(User $user): array {
+        return $this->userRepository->findUsersIFollow($user);
+    }
+
+    public function findUsersWhoFolloweMe(User $user): array {
+        return $this->userRepository->findUsersWhoFolloweMe($user);
+    }
 
 }
