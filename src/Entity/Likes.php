@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Impl\BaseEntity;
 use App\Repository\LikesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LikesRepository::class)]
-class Likes
+class Likes extends BaseEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
