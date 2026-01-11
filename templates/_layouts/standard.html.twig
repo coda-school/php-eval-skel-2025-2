@@ -1,7 +1,36 @@
+{# templates/_layouts/standard.html.twig #}
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/layouts/standard.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/components/boutons.css') }}">
+{% endblock %}
+
 {% block body %}
-
-	{% block content %}{% endblock %}
-
+    {# messages flashs #}
+    {% include '_components/_flash_messages.html.twig' %}
+    <div class="bg-scene">
+        <div class="grid-overlay"></div>
+        <div class="cube-container">
+            <span class="cube"></span>
+            <span class="cube"></span>
+            <span class="cube"></span>
+            <span class="cube"></span>
+        </div>
+    </div>
+    <header class="main-header">
+        <a href="{{ path('home') }}" class="logo-container" aria-label="Accueil Y">
+            <div class="octahedron">
+                <span class="fragment f1"></span>
+                <span class="fragment f2"></span>
+                <span class="fragment f3"></span>
+                <span class="fragment f4"></span>
+                <div class="core-sphere"></div>
+            </div>
+        </a>
+    </header>
+    <main class="content-wrapper">
+        {% block content %}{% endblock %}
+    </main>
 {% endblock %}
