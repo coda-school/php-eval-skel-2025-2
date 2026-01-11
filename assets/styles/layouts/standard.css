@@ -238,3 +238,63 @@ body {
     from { transform: perspective(1000px) rotateX(50deg) translateY(0); }
     to { transform: perspective(1000px) rotateX(50deg) translateY(100px); }
 }
+
+/* 6. STYLE FORMULAIRE REGISTER */
+.y-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    text-align: left; /* On aligne le texte à gauche pour les labels/erreurs */
+}
+
+/* Style des Inputs */
+.y-form input[type="text"],
+.y-form input[type="email"],
+.y-form input[type="password"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.y-form input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* Checkbox Terms */
+.form-terms {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Erreurs Symfony */
+.y-form ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.2rem 0 0 0;
+    color: #ef4444; /* Un rouge Y */
+    font-size: 0.85rem;
+}
+
+.form-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.link-muted {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.link-muted:hover {
+    color: var(--primary-green);
+}

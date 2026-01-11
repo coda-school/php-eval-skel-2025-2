@@ -1,21 +1,49 @@
 {% extends '_layouts/standard.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}S'inscrire sur Y{% endblock %}
 
-{% block body %}
-    <h1>Register</h1>
+{% block content %}
+    <div class="content-wrapper">
+        <div class="home-container">
+            <section class="home-card">
+                <h1 class="home-title">Rejoindre Y</h1>
+                <p class="home-tagline">Prêt à exprimer votre toxicité ?</p>
 
-    {{ form_errors(registrationForm) }}
+                {{ form_start(registrationForm, {'attr': {'class': 'y-form'}}) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                <div class="form-group">
+                    {{ form_widget(registrationForm.username, {'attr': {'placeholder': 'Nom d\'utilisateur'}}) }}
+                    {{ form_errors(registrationForm.username) }}
+                </div>
 
-        <button type="submit" class="btn">S'inscrire</button>
-    <a href="{{ path('app_login') }}">Vous avez déjà un compte?Connectez-vous!</a>
-    {{ form_end(registrationForm) }}
+                <div class="form-group">
+                    {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'Email'}}) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_widget(registrationForm.plainPassword, {
+                        'label': false,
+                        'attr': {'placeholder': 'Mot de passe'}
+                    }) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+
+                <div class="form-terms">
+                    {{ form_widget(registrationForm.agreeTerms) }}
+                    {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions (ou pas)') }}
+                </div>
+
+                <div class="home-actions">
+                    <button type="submit" class="btn btn-solid">Créer mon compte</button>
+                </div>
+
+                <div class="form-footer">
+                    <a href="{{ path('app_login') }}" class="link-muted">Déjà un adepte ? Connectez-vous</a>
+                </div>
+
+                {{ form_end(registrationForm) }}
+            </section>
+        </div>
+    </div>
 {% endblock %}
