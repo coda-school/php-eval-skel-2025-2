@@ -1,0 +1,240 @@
+/* 1. LAYOUT STRUCTURE */
+
+/* On utilise le body pour forcer le plein écran */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. HEADER (LOGO Y) */
+.main-header {
+    padding: 2rem;
+    position: absolute; /* On le sort du flux pour qu'il ne gêne pas le centrage de la carte */
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Conteneur du Logo */
+.logo-container {
+    display: block;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    cursor: pointer;
+}
+
+.octahedron {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate3D 8s linear infinite; /* Rotation continue */
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* La petite sphère au centre */
+.core-sphere {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: var(--primary-green);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--primary-green);
+    opacity: 0; /* Cachée au début */
+    transition: opacity 0.3s ease;
+}
+
+/* Les fragments (les 4 triangles formant le losange) */
+.fragment {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* On dessine des triangles pour former un losange */
+.f1 { border-width: 0 15px 25px 15px; border-color: transparent transparent var(--primary-green) transparent; top: 5px; left: 15px; }
+.f2 { border-width: 25px 15px 0 15px; border-color: var(--secondary-green) transparent transparent transparent; bottom: 5px; left: 15px; }
+.f3 { border-width: 0 15px 25px 15px; border-color: transparent transparent var(--secondary-green) transparent; top: 5px; left: 15px; transform: rotateY(90deg); }
+.f4 { border-width: 25px 15px 0 15px; border-color: var(--primary-green) transparent transparent transparent; bottom: 5px; left: 15px; transform: rotateY(90deg); }
+
+/* --- ANIMATIONS AU HOVER (MODE ORBITE) --- */
+
+.logo-container:hover .core-sphere {
+    opacity: 1;
+    /* La sphère centrale "vit" au milieu du chaos */
+    animation: pulse 0.8s ease-in-out infinite;
+}
+
+.logo-container:hover .octahedron {
+    /* On accélère la rotation : de 8s à 2s pour l'effet d'énergie */
+    animation-duration: 2s;
+}
+
+/* Éclatement + Rotation individuelle des fragments */
+.logo-container:hover .f1 { transform: translate(-28px, -28px) rotate(180deg); opacity: 0.8; }
+.logo-container:hover .f2 { transform: translate(28px, 28px) rotate(-180deg); opacity: 0.8; }
+.logo-container:hover .f3 { transform: translate(28px, -28px) rotate(360deg); opacity: 0.8; }
+.logo-container:hover .f4 { transform: translate(-28px, 28px) rotate(-360deg); opacity: 0.8; }
+
+/* La petite pulsation verte au centre */
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); filter: blur(0px); }
+    50% { transform: translate(-50%, -50%) scale(1.6); filter: blur(1px); box-shadow: 0 0 15px var(--primary-green); }
+}
+
+@keyframes rotate3D {
+    from { transform: rotateY(0deg) rotateX(0deg); }
+    to { transform: rotateY(360deg) rotateX(180deg); }
+}
+
+/* 3. HOME CONTAINER (CENTRAGE) */
+/* On répare le layout global */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* On s'assure qu'il n'y a pas de marges parasites */
+    margin: 0;
+    padding: 0;
+}
+
+/* Le container devient le vrai moteur de centrage */
+.home-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem;
+}
+
+/* 4. LA CARD "Y" */
+.home-card {
+    background-color: var(--white);
+    padding: 3rem 2.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow); /* Notre ombre diffuse */
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid var(--border-color); /* Une bordure très fine pour le relief */
+    animation: float 6s ease-in-out infinite;
+    transition: box-shadow 0.3s ease;
+    will-change: transform, box-shadow;
+    backface-visibility: hidden;
+}
+
+/* Stabilisation au survol */
+.home-card:hover {
+    /* On ralentit l'animation plutôt que de la stopper net (plus élégant) */
+    animation-duration: 12s;
+
+    /* On peut aussi légèrement augmenter l'ombre pour simuler une "prise" */
+    box-shadow: 0 30px 60px -12px rgba(16, 185, 129, 0.2);
+
+    /* On rajoute une légère bordure pour le focus */
+    border-color: var(--primary-green);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+        box-shadow: var(--shadow);
+    }
+    25% {
+        transform: translateY(-4px);
+    }
+    50% {
+        transform: translateY(-15px);
+        /* Ombre légèrement plus douce à l'apogée */
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+    }
+    75% {
+        transform: translateY(-4px);
+    }
+    100% {
+        transform: translateY(0);
+        box-shadow: var(--shadow);
+    }
+}
+
+.home-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -1.5px;
+}
+
+.home-tagline {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+/* 5. ACTIONS (BOUTONS) */
+.home-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* 11. LA SCÈNE DE FOND (White Room) */
+.bg-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #ffffff 0%, #e8f0ee 100%);
+    z-index: -1;
+    overflow: hidden;
+    /* On retire la perspective globale ici pour la gérer par plan */
+}
+
+/* 2. LA GRILLE INFINIE (Version GPU Ultra-Fluide & Masque Renforcé) */
+.grid-overlay {
+    position: absolute;
+    top: -100%;
+    left: -50%;
+    width: 200%;
+    height: 300%;
+
+    background-image:
+        linear-gradient(rgba(16, 185, 129, 0.3) 1.5px, transparent 1.5px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.3) 1.5px, transparent 1.5px);
+    background-size: 100px 100px;
+
+    /* L'astuce pour lisser les lignes fines */
+    image-rendering: optimizeSpeed;
+
+    transform: perspective(1000px) rotateX(50deg) translate3d(0,0,0);
+    will-change: transform;
+    backface-visibility: hidden;
+
+    animation: grid-glide 4s linear infinite;
+
+    /* ON RENFORCE LE HAUT :
+       Le noir (black) commence à 45% au lieu de 35% pour bien cacher le scintillement */
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 25%,
+        black 45%,
+        black 75%,
+        transparent 100%
+    );
+}
+
+@keyframes grid-glide {
+    from { transform: perspective(1000px) rotateX(50deg) translateY(0); }
+    to { transform: perspective(1000px) rotateX(50deg) translateY(100px); }
+}
