@@ -1,9 +1,20 @@
 {% extends '_layouts/standard.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil | Y{% endblock %}
 
-{% block body %}
-<h1>Application de gens toxics</h1>
-    <a href="{{ path('app_login') }}">Se connecter</a>
-    <a href="{{ path('register') }}">S'inscrire</a>
+{% block content %}
+    {# Contenu principal centré #}
+    <div class="home-container">
+        <article class="home-card">
+            <h1 class="home-title">Bienvenue sur Y</h1>
+            <p class="home-tagline">
+                Le réseau social où la toxicité devient un art. Exprimez-vous sans filtre, ou presque.
+            </p>
+
+            <nav class="home-actions">
+                <a href="{{ path('app_login') }}" class="btn btn-outline">Se connecter</a>
+                <a href="{{ path('register') }}" class="btn btn-solid">S'inscrire</a>
+            </nav>
+        </article>
+    </div>
 {% endblock %}

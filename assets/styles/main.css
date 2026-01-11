@@ -1,0 +1,54 @@
+/* 1. VARIABLES GLOBALES */
+:root {
+    /* Palette Vert Tech Moderne */
+    --primary-green: #10B981;   /* Émeraude (Bouton plein / Action) */
+    --secondary-green: #065F46; /* Forêt (Titres / Logo / Sémantique forte) */
+    --accent-green: #D1FAE5;    /* Menthe (Hover / Bordures douces) */
+
+    /* Neutres & Surfaces */
+    --white: #FFFFFF;        /* Ton fond immaculé */
+    --text-main: #111827;       /* Gris-noir (meilleur pour l'accessibilité que le noir pur) */
+    --text-muted: #6B7280;      /* Gris moyen (pour l'accroche et les détails) */
+    --border-color: #E5E7EB;    /* Gris très clair pour les séparations discrètes */
+
+    /* Typographie (System Stack pour la performance) */
+    --font-main: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    /* Spécifications UI */
+    --radius: 12px;             /* Arrondi "Soft Corner" */
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --transition: all 0.2s ease-in-out;
+}
+
+/* 2. RESET & BASE */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main), sans-serif;
+    background-color: var(--bg-white);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* 3. TYPOGRAPHIE SÉMANTIQUE */
+h1, h2, h3 {
+    color: var(--secondary-green);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
