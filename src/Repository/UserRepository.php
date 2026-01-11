@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Follows;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,5 +34,41 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function getUserInformations(User $user): array {
+
+        return $this
+            ->createQueryBuilder('u')
+            ->select('u.username as username', 'u.bio as bio')
+            ->where('u.id = :id')
+            ->setParameter('id', $user->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findUsersIFollow(User $user): array {
+        return $this
+            ->createQueryBuilder('u')
+            ->select('u.username as username')
+            ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = u.id')
+            ->andWhere('f.isDeleted = false')
+            ->andWhere('f.follower = :userId')
+            ->setParameter('userId', $user->getId())
+            ->orderBy('u.username', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUsersWhoFolloweMe(User $user): array {
+        return $this
+            ->createQueryBuilder('u')
+            ->select('u.username as username')
+            ->innerJoin(Follows::class, 'f', 'WITH', 'f.follower = u.id')
+            ->andWhere('f.isDeleted = false')
+            ->andWhere('f.followed = :userId')
+            ->setParameter('userId', $user->getId())
+            ->orderBy('u.username', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
 }

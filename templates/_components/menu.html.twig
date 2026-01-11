@@ -4,7 +4,7 @@
     <a href="{{ path('tweets_list') }}">Logo</a>
     <ul>
         <li>
-            <!-- <a href="">Profil</a>-->
+            <a href="{{ path('user_show', {'username': app.user.username}) }}">Profil</a>
         </li>
         <li>
             <a>Ne pas cliquer (Messagerie)</a>
@@ -16,7 +16,7 @@
             <a>Dark Theme/Light Theme</a>
         </li>
         <li>
-            <!-- <a href="">Se déconnecter</a> -->
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
         </li>
     </ul>
 </nav>
