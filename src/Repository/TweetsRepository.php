@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Follows;
+use App\Entity\Likes;
 use App\Entity\Tweets;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -15,30 +17,22 @@ class TweetsRepository extends ServiceEntityRepository
         parent::__construct($registry, Tweets::class);
     }
 
+    public function findTweetsForUserFromUsersFollowed(User $user): array
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t', 'COUNT(l.id) as totalLikes', 'u.username as authorName', 't.message as message', 't.createdDate as createdDate')
+            ->innerJoin('t.createdBy', 'u')
+            ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId')
+            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet')
+            ->andWhere('f.isDeleted = false')
+            ->andWhere('t.isDeleted = false')
+            ->andWhere('l.isDeleted = false')
+            ->groupBy('t.id', 'u.username')
+            ->orderBy('t.createdDate', 'DESC')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
 
-
-    //    /**
-    //     * @return Tweets[] Returns an array of Tweets objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Tweets
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

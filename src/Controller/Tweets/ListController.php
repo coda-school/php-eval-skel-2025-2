@@ -4,7 +4,6 @@ namespace App\Controller\Tweets;
 
 use App\DTO\TweetDTO;
 use App\Form\TweetType;
-use App\Service\FollowsService;
 use App\Service\TweetsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +16,7 @@ final class ListController extends AbstractController
     public function index(
         Request       $request,
         TweetsService $tweetService,
-        FollowsService  $followsService
+        TweetsService $tweetsService
     ): Response
     {
         $tweetDTO = new TweetDTO();
@@ -54,7 +53,7 @@ final class ListController extends AbstractController
 
         $connectedUser = $this->getUser();
 
-        $tweets = $followsService->findTweetsForUserFromUsersFollowed($connectedUser);
+        $tweets = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser);
 
 
         return $this->render('tweets/list/index.html.twig', [

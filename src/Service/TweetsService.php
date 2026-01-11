@@ -5,7 +5,7 @@ namespace App\Service;
 use App\DTO\TweetDTO;
 use App\Entity\Tweets;
 use App\Entity\User;
-use App\Repository\FollowsRepository;
+use App\Repository\TweetsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -13,6 +13,7 @@ class TweetsService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly TweetsRepository $tweetsRepository,
     )
     {
     }
@@ -29,6 +30,10 @@ class TweetsService
         $this->em->flush();
 
         return $tweet;
+    }
+
+    public function findTweetsForUserFromUsersFollowed(User $user): array {
+        return $this->tweetsRepository->findTweetsForUserFromUsersFollowed($user);
     }
 
 }
