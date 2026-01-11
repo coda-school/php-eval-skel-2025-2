@@ -48,7 +48,21 @@ class TweetsRepository extends ServiceEntityRepository
             ->setMaxResults(5)
             ->getQuery()
             ->getResult();
+    }
 
+    public function findTweetsFromConnectedUser(User $user): array {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t', 'u.username as authorName', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy AND u.id = :userId')
+            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet')
+            ->andWhere('t.isDeleted = false')
+            ->andWhere('l.isDeleted = false')
+            ->orderBy('t.createdDate', 'DESC')
+            ->groupBy('t.id', 'u.username')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
     }
 
 }
