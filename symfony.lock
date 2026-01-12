@@ -56,6 +56,9 @@
             "ref": "b3348dadb52ed0390e71ae1323caff9e86bbe7f1"
         }
     },
+    "knplabs/knp-time-bundle": {
+        "version": "2.5.0"
+    },
     "symfony/asset-mapper": {
         "version": "7.4",
         "recipe": {
@@ -173,6 +176,19 @@
         "files": [
             "config/packages/security.yaml",
             "config/routes/security.yaml"
+        ]
+    },
+    "symfony/translation": {
+        "version": "7.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.3",
+            "ref": "620a1b84865ceb2ba304c8f8bf2a185fbf32a843"
+        },
+        "files": [
+            "config/packages/translation.yaml",
+            "translations/.gitignore"
         ]
     },
     "symfony/twig-bundle": {

@@ -12,7 +12,7 @@
         <p>
             {{ tweet.authorName }}
             {{ tweet.message }}
-            {{ tweet.createdDate|date('d/m/H:i')}}
+            {{ tweet.createdDate | ago(locale='fr') }}
             {{ tweet.totalLikes }} likes
         </p>
     {% endfor %}
@@ -32,7 +32,7 @@
         <p>
             {{ tweet.authorName }}
             {{ tweet.message }}
-            {{ tweet.createdDate|date('d/m/H:i')}}
+            {{ tweet.createdDate | ago(locale='fr') }}
             {{ tweet.totalLikes }} likes
         </p>
     {% endfor %}
