@@ -26,13 +26,19 @@ final class ShowController extends AbstractController
 
         $followedOfUser = $userService->findUsersIFollow($user);
 
+        $nbOfFollowed = sizeof($followedOfUser);
+
         $followersOfUser = $userService->findUsersWhoFolloweMe($user);
+
+        $nbOfFollowers = sizeof($followersOfUser);
 
         return $this->render('user/show/index.html.twig', [
             'informations' => $informationsOfUser,
             'tweets' => $tweetsOfUser,
             'followed' => $followedOfUser,
             'followers' => $followersOfUser,
+            'nb_followed' => $nbOfFollowed,
+            'nb_followers' => $nbOfFollowers,
         ]);
     }
 }

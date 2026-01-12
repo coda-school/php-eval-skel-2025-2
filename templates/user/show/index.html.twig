@@ -10,6 +10,7 @@
     <p>{{ informations.bio }}</p>
 
     <h1>Followed</h1>
+    <p>Nombre de followed : {{ nb_followed }}</p>
     {% for user in followed %}
         <p>
             <a href="{{ path('user_show', {'username': user.username}) }}">{{ user.username }}</a>
@@ -17,6 +18,7 @@
     {% endfor %}
 
     <h1>Followers</h1>
+    <p>Nombre de followers : {{ nb_followers }}</p>
     {% for user in followers %}
         <p>
             <a href="{{ path('user_show', {'username': user.username}) }}">{{ user.username }}</a>
