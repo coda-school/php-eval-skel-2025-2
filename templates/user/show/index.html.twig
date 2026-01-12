@@ -10,7 +10,7 @@
     <p>{{ informations.bio }}</p>
 
     {% if app.user.username != informations.username %}
-    <a href="">{{ is_followed ? "Ne plus suivre" : "Suivre" }}</a>
+    <a href="{{ path('follows_edit', {'name': informations.username}) }}">{{ is_followed ? "Ne plus suivre" : "Suivre" }}</a>
     {% endif %}
 
     <h1>Followed</h1>

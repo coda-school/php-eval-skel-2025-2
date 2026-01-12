@@ -24,6 +24,7 @@ class FollowsRepository extends ServiceEntityRepository
             ->innerJoin('f.followed', 'u_followed')
             ->andwhere('u_follower.username = :followerName')
             ->andWhere('u_followed.username = :followedName')
+            ->andWhere('f.isDeleted = false')
             ->setParameter('followerName', $followerName)
             ->setParameter('followedName', $followedName)
             ->getQuery()
