@@ -9,6 +9,10 @@
     <p>{{ informations.username }}</p>
     <p>{{ informations.bio }}</p>
 
+    {% if app.user.username != informations.username %}
+    <a href="">{{ is_followed ? "Ne plus suivre" : "Suivre" }}</a>
+    {% endif %}
+
     <h1>Followed</h1>
     <p>Nombre de followed : {{ nb_followed }}</p>
     {% for user in followed %}
