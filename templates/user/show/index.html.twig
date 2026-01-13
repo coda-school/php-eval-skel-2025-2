@@ -9,7 +9,12 @@
     <p>{{ informations.username }}</p>
     <p>{{ informations.bio }}</p>
 
+    {% if app.user.username != informations.username %}
+    <a href="{{ path('follows_edit', {'name': informations.username}) }}">{{ is_followed ? "Ne plus suivre" : "Suivre" }}</a>
+    {% endif %}
+
     <h1>Followed</h1>
+    <p>Nombre de followed : {{ nb_followed }}</p>
     {% for user in followed %}
         <p>
             <a href="{{ path('user_show', {'username': user.username}) }}">{{ user.username }}</a>
@@ -17,6 +22,7 @@
     {% endfor %}
 
     <h1>Followers</h1>
+    <p>Nombre de followers : {{ nb_followers }}</p>
     {% for user in followers %}
         <p>
             <a href="{{ path('user_show', {'username': user.username}) }}">{{ user.username }}</a>
@@ -28,7 +34,7 @@
         <p>
             {{ tweet.authorName }}
             {{ tweet.message }}
-            {{ tweet.createdDate|date('d/m/H:i')}}
+            {{ tweet.createdDate | ago(locale='fr') }}
             {{ tweet.totalLikes }} likes
         </p>
     {% endfor %}

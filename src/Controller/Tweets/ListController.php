@@ -61,8 +61,6 @@ final class ListController extends AbstractController
 
         $ndTotalTweets = $tweetService->nbTotalTweetsForUserFromUsersFollowed($connectedUser);
 
-        echo $ndTotalTweets;
-
         if ($ndTotalTweets <= $limit) {
             $maxPaginationPage = 1;
         } else {

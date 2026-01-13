@@ -41,7 +41,7 @@ class AppFixtures extends Fixture
             ["Toto", "toto@coda.fr", "toto", "Le roi des blagues (pas toujours drôles). Je vis pour faire rire."],
             ["Tutu", "tutu@coda.fr", "tutu", "Danseuse étoile dans l'âme, développeuse Front-end dans la vraie vie. 🩰"],
             ["Tyty", "tyty@coda.fr", "tyty", "Discret mais efficace. Grand amateur de philosophie et de thé vert."],
-            ["tata", "tata@coda.fr", "tata", "La tante préférée du réseau ! Je partage mes meilleures recettes de gâteaux. 🍰"],
+            ["Tata", "tata@coda.fr", "tata", "La tante préférée du réseau ! Je partage mes meilleures recettes de gâteaux. 🍰"],
             ["Tete", "tete@coda.fr", "tete", "Globe-trotteur et photographe amateur. 📸 Le monde est mon terrain de jeu."],
         ];
 
