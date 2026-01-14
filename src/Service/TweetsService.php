@@ -32,6 +32,15 @@ class TweetsService
         return $tweet;
     }
 
+    public function updateTweet(Tweets $tweets, TweetDTO $dto, User $updater): Tweets {
+        $tweets->setMessage($dto->message);
+        $tweets->setUpdatedBy($updater);
+        $tweets->setUpdatedDate(new \DateTime());
+        $this->em->persist($tweets);
+        $this->em->flush();
+        return $tweets;
+    }
+
     public function findTweetsForUserFromUsersFollowed(User $user, int $page, int $limit): array {
         return $this->tweetsRepository->findTweetsForUserFromUsersFollowed($user, $page, $limit);
     }
