@@ -1,0 +1,15 @@
+{% extends '_layouts/in_app.html.twig' %}
+
+{% block title %}Hello User/EditController!{% endblock %}
+
+{% block content %}
+
+    <h1>Modifier le profil</h1>
+
+    <div>
+        {{ form_start(form) }}
+        <button type="submit">Enregistrer</button>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

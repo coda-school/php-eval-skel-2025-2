@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,8 +19,28 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
-            ->add('email')
+            ->add('username', TextType::class, [
+                'constraints' => [
+                    new NotBlank(
+                        message: "Votre nom d'utilisateur ne peut pas être vide"
+                    ),
+                    new Length(
+                        min: 3,
+                        max:30,
+                        minMessage: "Votre pseudo doit contenir minimum 3 caracteres",
+                        maxMessage: "Votre pseudo peut contenir au maximum 30 caracteres"
+                    )
+                ],
+                'required' => true,
+            ])
+            ->add('email', EmailType::class, [
+                'constraints' => [
+                    new NotBlank(
+                        message: "Votre email ne peut pas être vide"
+                    )
+                ],
+                'required' => true,
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -43,6 +65,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                'required' => true,
             ])
         ;
     }
