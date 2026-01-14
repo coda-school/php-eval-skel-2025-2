@@ -4,10 +4,18 @@
 
 {% block content %}
 
+    {% if app.user.username == informations.username %}
+    <a href="{{ path('user_edit', {'username' : informations.username}) }}">test</a>
+    {% endif %}
+
     <h1>Informations</h1>
 
     <p>{{ informations.username }}</p>
     <p>{{ informations.bio }}</p>
+
+    {% if app.user.username == informations.username %}
+    <a href="{{ path('user_edit', {'username': app.user.username}) }}">Modifier profil</a>
+    {% endif %}
 
     {% if app.user.username != informations.username %}
     <a href="{{ path('follows_edit', {'name': informations.username}) }}">{{ is_followed ? "Ne plus suivre" : "Suivre" }}</a>
