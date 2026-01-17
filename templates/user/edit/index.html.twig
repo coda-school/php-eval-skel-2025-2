@@ -12,4 +12,6 @@
         {{ form_end(form) }}
     </div>
 
+    <a href="{{ path('user_show', {'username': app.user.username}) }}">Retour au profil</a>
+
 {% endblock %}

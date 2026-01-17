@@ -20,27 +20,11 @@ final class EditController extends AbstractController
         User $user,
         Request $request,
         FollowsService $followsService,
-        EntityManagerInterface $em
     ): Response
     {
         $currentUser = $this->getUser();
 
-        $isFollowed = $followsService->findIfFollowerFollowFollowed($currentUser->getUsername(), $user->getUsername());
-
-        if ($isFollowed) {
-            $isFollowed->setIsDeleted(true);
-            $isFollowed->setDeletedBy($currentUser);
-            $isFollowed->setDeletedDate(new \DateTime());
-        } else {
-            $isFollowed = new Follows();
-            $isFollowed->setCreatedBy($currentUser);
-            $isFollowed->setCreatedDate(new \DateTime());
-            $isFollowed->setFollowed($user);
-            $isFollowed->setFollower($currentUser);
-            $em->persist($isFollowed);
-        }
-
-        $em->flush();
+        $followsService->toggleFollow($currentUser, $user);
 
         // On récupère l'URL précédent
         $referer = $request->headers->get('referer');
