@@ -77,6 +77,4 @@ class TweetsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-
 }

@@ -4,10 +4,6 @@
 
 {% block content %}
 
-    {% if app.user.username == informations.username %}
-    <a href="{{ path('user_edit', {'username' : informations.username}) }}">test</a>
-    {% endif %}
-
     <h1>Informations</h1>
 
     <p>{{ informations.username }}</p>
