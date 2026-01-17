@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Erreur {{ status_code }} | Erreur Serveur
+{% endblock %}
+
+{% block body %}
+    <h1>Oups ! Une erreur est survenue.</h1>
+    <p>Code {{ status_code }}</p>
+    <h2>Erreur Serveur</h2>
+    <p>Il semble qu'une erreur serveur soit survenue.</p>
+    <div>
+        <a href="{{ path('tweets_list') }}">
+            Retourner à l'accueil
+        </a>
+    </div>
+{% endblock %}
