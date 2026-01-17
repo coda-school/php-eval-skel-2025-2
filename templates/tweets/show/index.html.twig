@@ -6,7 +6,7 @@
     <article class="single-tweet">
         <h1>Tweet de {{ tweet.createdBy.username }}</h1>
         <p>{{ tweet.message }}</p>
-        <p>Posté le : {{ tweet.createdDate|date('d/m/Y H:i') }}</p>
+        <p>Posté le : {{ tweet.createdDate | ago(locale='fr') }}</p>
         {% if app.user and tweet.createdBy == app.user %}
         <a href="{{ path('tweets_edit', {'uid': tweet.uid}) }}">
             MODIFIER
