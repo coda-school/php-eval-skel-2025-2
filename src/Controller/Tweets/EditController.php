@@ -25,7 +25,8 @@ final class EditController extends AbstractController
         $connectedUser = $this->getUser();
 
         if ($tweets->getCreatedBy() !== $connectedUser) {
-            throw $this->createAccessDeniedException("Ce n'est pas votre tweet !");
+            $this->addFlash("danger", "Vous n'êtes pas autorisez à modifier ce tweet.");
+            return $this->redirectToRoute('tweets_show', ['uid' => $tweets->getUid()]);
         }
 
         $dto = TweetDTO::fromEntity($tweets);
