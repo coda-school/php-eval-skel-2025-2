@@ -1,0 +1,10 @@
+[33m7d34808[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Merge branch 'main' of https://github.com/coda-school/php-eval-skel-2025-2
+[33mafa8e36[m feat: recherche et nettoyage des secrets
+[33m42563de[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Feat: modification de l'affichage d'un tweet
+[33m831f23e[m Feat: resolve conflit merge
+[33ma06f2cf[m Feat: gestion de l'affichage d'un tweet
+[33mee1412a[m test .env
+[33m073dcc0[m merge: resolve
+[33m40f3845[m feat: ajout de la fonctionnalité SEARCH par tweets
+[33maa44e0f[m merge: résolution du conflit merge
+[33mcb9813f[m feat: ajout du menu stylisé + correction du register
