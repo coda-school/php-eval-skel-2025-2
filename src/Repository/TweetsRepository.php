@@ -21,7 +21,7 @@ class TweetsRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
@@ -52,7 +52,7 @@ class TweetsRepository extends ServiceEntityRepository
     public function findTop5LikeTweets(): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName', 't.uid as uid', 't.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet')
             ->andWhere('t.isDeleted = false')
@@ -67,7 +67,7 @@ class TweetsRepository extends ServiceEntityRepository
     public function findTweetsFromUser(User $user): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy AND u.id = :userId')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.isDeleted = false')

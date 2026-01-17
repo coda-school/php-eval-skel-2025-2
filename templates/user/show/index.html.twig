@@ -4,10 +4,6 @@
 
 {% block content %}
 
-    {% if app.user.username == informations.username %}
-    <a href="{{ path('user_edit', {'username' : informations.username}) }}">test</a>
-    {% endif %}
-
     <h1>Informations</h1>
 
     <p>{{ informations.username }}</p>
@@ -43,7 +39,8 @@
             {{ tweet.authorName }}
             {{ tweet.message }}
             {{ tweet.createdDate | ago(locale='fr') }}
-            {{ tweet.totalLikes }} likes
+            <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">{{ tweet.isLikedByMe ? '♥' : '♡' }}</a>
+            {{ tweet.totalLikes }}
             <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}">
                 DETAIL
             </a>
