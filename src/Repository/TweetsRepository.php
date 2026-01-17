@@ -78,5 +78,19 @@ class TweetsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getTweetByUid (string $tweetUid): array {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 'u.id as authorId', 'COUNT(l.id) as totalLikes')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy')
+            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
+            ->andWhere('t.uid = :tweetUid')
+            ->andWhere('t.isDeleted = false')
+            ->groupBy('t.id', 'u.username', 'u.id')
+            ->setParameter('tweetUid', $tweetUid)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 
 }
