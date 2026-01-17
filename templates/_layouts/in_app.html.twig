@@ -1,7 +1,23 @@
+{# templates/_layouts/in_app.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    {% include "_components/menu.html.twig" %}
-	{% block content %}{% endblock %}
+{% block stylesheets %}
+    {# On garde le main pour les variables de couleurs, mais on vire le reste #}
+    <link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/components/menu.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/components/boutons.css') }}">
+{% endblock %}
 
+{% block body %}
+    {% include "_components/_flash_messages.html.twig" %}
+
+    <div class="in-app-container">
+        {# Le menu reste fixe à gauche #}
+        {% include "_components/menu.html.twig" %}
+
+        {# Le contenu principal décalé #}
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 {% endblock %}

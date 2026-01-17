@@ -78,6 +78,18 @@ class TweetsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function searchTweets(string $search): array {
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t', 'u.username as authorName', 't.uid as uid', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy')
+            ->innerJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
+            ->andWhere('t.message LIKE :search')
+            ->groupBy('t.id', 'u.username')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
+    }
     public function getTweetByUid (string $tweetUid): array {
         return $this
             ->createQueryBuilder('t')

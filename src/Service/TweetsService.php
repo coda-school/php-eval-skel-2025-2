@@ -65,6 +65,10 @@ class TweetsService
         return $this->tweetsRepository->findTweetsFromUser($user);
     }
 
+    public function searchTweets (string $search): array {
+        return $this->tweetsRepository->searchTweets($search);
+    }
+
     public function getTweetByUid(string $tweetUid): array {
         return $this->tweetsRepository->getTweetByUid($tweetUid);
     }

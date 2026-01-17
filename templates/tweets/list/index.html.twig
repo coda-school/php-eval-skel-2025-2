@@ -3,7 +3,17 @@
 {% block title %}Hello Tweets/ListController!{% endblock %}
 
 {% block content %}
+    {{ form_start(formSearch) }}
+    {{ form_end(formSearch) }}
+
     {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_widget(form.message, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.message) }}
+    </div>
+    <div class="actions" style="margin-top: 20px">
+        <button type="submit">Créer</button>
+    </div>
     {{ form_end(form) }}
 
     <h1>Thread</h1>
