@@ -6,6 +6,7 @@ use App\DTO\TweetDTO;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\TweetType;
+use App\Service\LikesService;
 use App\Service\TweetsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,7 @@ final class ListController extends AbstractController
         Request       $request,
         TweetsService $tweetService,
         TweetsService $tweetsService,
+        LikesService $likesService,
         TweetsService $searchTweets,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] int $limit = 5
@@ -69,6 +71,11 @@ final class ListController extends AbstractController
 
         $tweetsFollowed = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser, $page, $limit);
 
+        foreach ($tweetsFollowed as $key => $tweet) {
+            $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
+            $tweetsFollowed[$key]['isLikedByMe'] = ($isLiked !== null);
+        }
+
         $ndTotalTweets = $tweetService->nbTotalTweetsForUserFromUsersFollowed($connectedUser);
 
         if ($ndTotalTweets <= $limit) {
@@ -78,6 +85,11 @@ final class ListController extends AbstractController
         }
 
         $top5Tweets = $tweetsService->findTop5LikeTweets();
+
+        foreach ($top5Tweets as $key => $tweet) {
+            $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
+            $top5Tweets[$key]['isLikedByMe'] = ($isLiked !== null);
+        }
 
         return $this->render('tweets/list/index.html.twig', [
             'formSearch' => $formSearch,

@@ -1,0 +1,306 @@
+/* assets/styles/components/menu.css */
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px); /* Petit effet de transparence classe */
+    z-index: 100;
+}
+
+/* 1. LOGO (TOP) */
+.menu-top {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    perspective: 800px;
+}
+
+/* Conteneur du Logo */
+.menu-logo {
+    display: block;
+    width: 80px;
+    height: 80px;
+    position: relative;
+    cursor: pointer;
+}
+
+.octahedron.small {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate3D 8s linear infinite; /* Rotation continue */
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateZ(0);
+}
+
+/* La petite sphère au centre */
+.core-sphere {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: var(--primary-green);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--primary-green);
+    opacity: 0; /* Cachée au début */
+    transition: opacity 0.3s ease;
+}
+
+/* Les fragments (les 4 triangles formant le losange) */
+.fragment {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* On dessine des triangles pour former un losange */
+.f1 { border-width: 0 20px 35px 20px; border-color: transparent transparent var(--primary-green) transparent; top: 5px; left: 15px; }
+.f2 { border-width: 35px 20px 0 20px; border-color: var(--secondary-green) transparent transparent transparent; bottom: 5px; left: 15px; }
+.f3 { border-width: 0 20px 35px 20px; border-color: transparent transparent var(--secondary-green) transparent; top: 5px; left: 15px; transform: rotateY(90deg); }
+.f4 { border-width: 35px 20px 0 20px; border-color: var(--primary-green) transparent transparent transparent; bottom: 5px; left: 15px; transform: rotateY(90deg); }
+
+/* --- ANIMATIONS AU HOVER (MODE ORBITE) --- */
+
+.menu-logo:hover .core-sphere {
+    opacity: 1;
+    /* La sphère centrale "vit" au milieu du chaos */
+    animation: pulse 0.8s ease-in-out infinite;
+}
+
+.menu-logo:hover .octahedron {
+    /* On accélère la rotation : de 8s à 2s pour l'effet d'énergie */
+    animation-duration: 2s;
+}
+
+/* Éclatement + Rotation individuelle des fragments */
+.menu-logo:hover .f1 { transform: translate(-28px, -28px) rotate(180deg); opacity: 0.8; }
+.menu-logo:hover .f2 { transform: translate(28px, 28px) rotate(-180deg); opacity: 0.8; }
+.menu-logo:hover .f3 { transform: translate(28px, -28px) rotate(360deg); opacity: 0.8; }
+.menu-logo:hover .f4 { transform: translate(-28px, 28px) rotate(-360deg); opacity: 0.8; }
+
+/* La petite pulsation verte au centre */
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); filter: blur(0px); }
+    50% { transform: translate(-50%, -50%) scale(1.6); filter: blur(1px); box-shadow: 0 0 15px var(--primary-green); }
+}
+
+@keyframes rotate3D {
+    from { transform: rotateY(0deg) rotateX(15deg); }
+    to { transform: rotateY(360deg) rotateX(180deg); }
+}
+
+/* 2. USER INFO (Style Terminal) */
+.menu-user-info {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.user-handle {
+    font-weight: 800;
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.user-handle .at-symbol {
+    margin-right: 2px;
+    flex-shrink: 0;
+}
+
+.typing-effect {
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--primary-green);
+
+    max-width: 170px;
+
+    /* On utilise 'forwards' pour garder l'état final,
+       mais on ne met PAS de text-overflow ici par défaut */
+    animation:
+        typing 2s steps(30, end) forwards,
+        blink 0.8s step-end infinite,
+        enable-ellipsis 0s forwards 2s;
+}
+
+@keyframes enable-ellipsis {
+    to { text-overflow: ellipsis; }
+}
+
+/* Animation de l'écriture */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; } /* On ajuste à 100% du texte */
+}
+
+/* Animation du clignotement du curseur */
+@keyframes blink {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--primary-green); }
+}
+
+/* 3. LIENS (CENTER) */
+.menu-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.menu-links li a, .logout-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.menu-links li a:hover:not(.disabled) {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--primary-green);
+}
+
+/* Lien Actif */
+.menu-links li.active a {
+    color: var(--black);
+    font-weight: 700;
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.icon {
+    font-size: 1.2rem;
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 4. LOGOUT (BOTTOM) */
+.menu-bottom {
+    margin-top: auto; /* Pousse le bouton vers le bas */
+    border-top: 1px solid var(--border-color);
+    height: 100px;
+    display: flex;
+    align-items: center;    /* CENTRE VERTICALEMENT */
+    justify-content: center; /* CENTRE HORIZONTALEMENT */
+    width: 100%;
+}
+
+.logout-link {
+    color: #ef4444 !important;
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    /* On s'assure qu'il n'y a pas de marges parasites */
+    margin: 0; /* Rouge pour la sortie */
+}
+
+.logout-link:hover {
+    background: rgba(239, 68, 68, 0.08) !important;
+}
+
+
+/*5. Décalage du contenu pour eviter l'écrasement de la sidebar*/
+.in-app-container {
+    display: flex;
+    background-color: #ffffff; /* Fond blanc propre */
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-left: 260px; /* Largeur de ton menu side-menu */
+    flex: 1;
+    padding: 2rem 3rem;
+    max-width: 800px; /* Évite que les lignes de texte soient trop longues */
+}
+
+/*6.TROLL log system*/
+
+.terminal-loader {
+    margin: 1rem 0; /* On réduit les marges */
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-left: 2px solid var(--border-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem; /* On diminue légèrement la police */
+    line-height: 1.3;   /* On resserre les lignes */
+
+    /* On s'assure qu'il ne prend pas plus de place que nécessaire */
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+}
+
+.terminal-header .dot {
+    width: 6px;
+    height: 6px;
+    background: #ef4444; /* Rouge pour le côté "danger/alerte" */
+    border-radius: 50%;
+    animation: pulse-red 1s infinite;
+}
+
+.terminal-body .line {
+    color: #888;
+    margin-bottom: 4px;
+    opacity: 0;
+    animation: fadeInLine 0.4s forwards;
+}
+
+/* Séquençage des 7 lignes (commence après le pseudo @Alice) */
+.terminal-body .line:nth-child(1) { animation-delay: 2.2s; }
+.terminal-body .line:nth-child(2) { animation-delay: 2.7s; }
+.terminal-body .line:nth-child(3) { animation-delay: 3.2s; }
+.terminal-body .line:nth-child(4) { animation-delay: 3.7s; }
+.terminal-body .line:nth-child(5) { animation-delay: 4.2s; }
+.terminal-body .line:nth-child(6) { animation-delay: 4.7s; }
+.terminal-body .line:nth-child(7) {
+    animation-delay: 5.5s;
+    color: var(--primary-green);
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+@keyframes fadeInLine {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}

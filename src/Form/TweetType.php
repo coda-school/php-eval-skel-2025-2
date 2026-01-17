@@ -31,7 +31,7 @@ class TweetType extends AbstractType
                 "required" => true,
                 "help" => "Votre message doit être compris entre 1 et 280 caractères",
             ])
-            ->add('submit', SubmitType::class)
+
         ;
     }
 

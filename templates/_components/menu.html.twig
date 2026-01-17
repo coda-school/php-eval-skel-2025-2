@@ -1,19 +1,61 @@
-{% set current_route = app.current_route %}
+{# templates/_components/_menu.html.twig #}
+{% set current_route = app.request.attributes.get('_route') %}
 
-<nav>
-    <a href="{{ path('tweets_list') }}">Logo</a>
-    <ul>
-        <li>
-            <a href="{{ path('user_show', {'username': app.user.username}) }}">Profil</a>
-        </li>
-        <li>
-            <a>Ne pas cliquer (Messagerie)</a>
-        </li>
-        <li>
-            <a>Dark Theme/Light Theme</a>
-        </li>
-        <li>
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
-        </li>
-    </ul>
+<nav class="side-menu">
+    <div class="menu-top">
+        <a href="{{ path('tweets_list') }}" class="menu-logo">
+            <div class="octahedron small">
+                <span class="fragment f1"></span>
+                <span class="fragment f2"></span>
+                <span class="fragment f3"></span>
+                <span class="fragment f4"></span>
+                <div class="core-sphere"></div>
+            </div>
+        </a>
+    </div>
+
+    <div class="menu-center">
+        <div class="menu-user-info">
+            <span class="user-handle">
+                <span class="at-symbol">@</span>
+                <span class="typing-effect">{{ app.user.username }}</span>
+            </span>
+        </div>
+
+        <ul class="menu-links">
+            <li class="{{ current_route == 'user_show' ? 'active' : '' }}">
+                <a href="{{ path('user_show', {'username': app.user.username}) }}">
+                    Profil
+                </a>
+            </li>
+            <li>
+                <a class="disabled">Messagerie</a>
+            </li>
+            <li>
+                <a class="disabled">Thème</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="terminal-loader">
+        <div class="terminal-header">
+            <span class="dot"></span>
+            <span class="status">Y_CORE: LOGGING...</span>
+        </div>
+        <div class="terminal-body">
+            <div class="line">>> Initialisation du mépris...</div>
+            <div class="line">>> Injection de venin algorithmique...</div>
+            <div class="line">>> Calibration du chaos ambiant...</div>
+            <div class="line">>> Analyse de la médiocrité humaine...</div>
+            <div class="line">>> Suppression de l'empathie (100%)...</div>
+            <div class="line">>> Propagation de la haine...</div>
+            <div class="line highlight">READY: SPREAD CHAOS</div>
+        </div>
+    </div>
+
+    <div class="menu-bottom">
+        <a href="{{ path('app_logout') }}" class="logout-link">
+            Se déconnecter
+        </a>
+    </div>
 </nav>
