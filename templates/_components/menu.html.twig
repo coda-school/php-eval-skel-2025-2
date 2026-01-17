@@ -23,13 +23,15 @@
         </div>
 
         <ul class="menu-links">
+            <li class="{{ current_route == 'tweets_list' ? 'active' : '' }}">
+                <a href="{{ path('tweets_list') }}">
+                    Accueil
+                </a>
+            </li>
             <li class="{{ current_route == 'user_show' ? 'active' : '' }}">
                 <a href="{{ path('user_show', {'username': app.user.username}) }}">
                     Profil
                 </a>
-            </li>
-            <li>
-                <a class="disabled">Messagerie</a>
             </li>
             <li>
                 <a class="disabled">Thème</a>
