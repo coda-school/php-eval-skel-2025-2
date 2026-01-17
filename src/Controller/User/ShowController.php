@@ -24,7 +24,7 @@ final class ShowController extends AbstractController
     {
         $informationsOfUser = $userService->getUserInformations($user);
 
-        $tweetsOfUser = $tweetsService->findTweetsFromConnectedUser($user);
+        $tweetsOfUser = $tweetsService->findTweetsFromUser($user);
 
         $followedOfUser = $userService->findUsersIFollow($user);
 

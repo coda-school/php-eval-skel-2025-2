@@ -40,6 +40,9 @@
             {{ tweet.message }}
             {{ tweet.createdDate | ago(locale='fr') }}
             {{ tweet.totalLikes }} likes
+            <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}">
+                DETAIL
+            </a>
         </p>
     {% endfor %}
 

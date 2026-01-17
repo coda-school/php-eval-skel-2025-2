@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Erreur {{ status_code }} | Page Non Trouvée
+{% endblock %}
+
+{% block body %}
+    <h1>Oups ! Une erreur est survenue.</h1>
+    <p>Code {{ status_code }}</p>
+    <h2>Page introuvable</h2>
+    <p>Il semble que le chemin que vous suivez n'est pas le bon.</p>
+    <div>
+        <a href="{{ path('tweets_list') }}">
+            Retourner à l'accueil
+        </a>
+    </div>
+{% endblock %}
