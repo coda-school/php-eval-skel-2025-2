@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Service\FollowsService;
+use App\Service\LikesService;
 use App\Service\TweetsService;
 use App\Service\UserService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -19,7 +20,8 @@ final class ShowController extends AbstractController
         User $user,
         UserService $userService,
         TweetsService $tweetsService,
-        FollowsService $followsService
+        FollowsService $followsService,
+        LikesService $likesService
     ): Response
     {
         $informationsOfUser = $userService->getUserInformations($user);
@@ -34,12 +36,17 @@ final class ShowController extends AbstractController
 
         $nbOfFollowers = sizeof($followersOfUser);
 
-        $currentUser = $this->getUser();
+        $connectedUser = $this->getUser();
 
         $isFollowed = false;
 
-        if ($currentUser !== $user) {
-            $isFollowed = $followsService->findIfFollowerFollowFollowed($currentUser->getUsername(), $user->getUsername());
+        if ($connectedUser !== $user) {
+            $isFollowed = $followsService->findIfFollowerFollowFollowed($connectedUser->getUsername(), $user->getUsername());
+        }
+
+        foreach ($tweetsOfUser as $key => $tweet) {
+            $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
+            $tweetsOfUser[$key]['isLikedByMe'] = ($isLiked !== null);
         }
 
         return $this->render('user/show/index.html.twig', [

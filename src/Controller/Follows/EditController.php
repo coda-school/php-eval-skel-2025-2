@@ -2,10 +2,8 @@
 
 namespace App\Controller\Follows;
 
-use App\Entity\Follows;
 use App\Entity\User;
 use App\Service\FollowsService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EditController extends AbstractController
 {
-    #[Route('/follows/edit/{name}', name: 'follows_edit')]
+    #[Route('/follows/{name}/edit', name: 'follows_edit')]
     public function index(
         #[MapEntity(mapping: ["name" => "username"])]
         User $user,
@@ -22,9 +20,9 @@ final class EditController extends AbstractController
         FollowsService $followsService,
     ): Response
     {
-        $currentUser = $this->getUser();
+        $connectedUser = $this->getUser();
 
-        $followsService->toggleFollow($currentUser, $user);
+        $followsService->toggleFollow($connectedUser, $user);
 
         // On récupère l'URL précédent
         $referer = $request->headers->get('referer');
