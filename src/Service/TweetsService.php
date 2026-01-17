@@ -41,6 +41,14 @@ class TweetsService
         return $tweets;
     }
 
+    public function deleteTweet(Tweets $tweets, User $user): void {
+        $tweets->setIsDeleted(true);
+        $tweets->setDeletedBy($user);
+        $tweets->setDeletedDate(new \DateTime());
+        $this->em->persist($tweets);
+        $this->em->flush();
+    }
+
     public function findTweetsForUserFromUsersFollowed(User $user, int $page, int $limit): array {
         return $this->tweetsRepository->findTweetsForUserFromUsersFollowed($user, $page, $limit);
     }

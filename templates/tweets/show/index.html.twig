@@ -11,6 +11,9 @@
         <a href="{{ path('tweets_edit', {'uid': tweet.uid}) }}">
             MODIFIER
         </a>
+        <a href="{{ path('tweets_delete', {'uid': tweet.uid}) }}">
+            SUPPRIMER
+        </a>
         {% endif %}
     </article>
 {% endblock %}
