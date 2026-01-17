@@ -4,6 +4,7 @@ namespace App\Controller\Tweets;
 
 use App\DTO\TweetDTO;
 use App\Entity\User;
+use App\Form\SearchType;
 use App\Form\TweetType;
 use App\Service\TweetsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ final class ListController extends AbstractController
         Request       $request,
         TweetsService $tweetService,
         TweetsService $tweetsService,
+        TweetsService $searchTweets,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] int $limit = 5
     ): Response
@@ -30,6 +32,14 @@ final class ListController extends AbstractController
 
         // traitement du formulaire par symfony, validations, etc.
         $form->handleRequest($request);
+
+        $formSearch = $this->CreateForm(SearchType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $search = $formSearch->getData();
+            return $this->redirectToRoute('search_tweets', ['search' => $search['rechercher']]);
+        }
 
         // si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,8 +79,8 @@ final class ListController extends AbstractController
 
         $top5Tweets = $tweetsService->findTop5LikeTweets();
 
-
         return $this->render('tweets/list/index.html.twig', [
+            'formSearch' => $formSearch,
             'form' => $form,
             'tweets' => $tweetsFollowed,
             'top5Tweets' => $top5Tweets,
