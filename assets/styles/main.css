@@ -7,6 +7,7 @@
 
     /* Neutres & Surfaces */
     --white: #FFFFFF;        /* Ton fond immaculé */
+    --black: #111827;
     --text-main: #111827;       /* Gris-noir (meilleur pour l'accessibilité que le noir pur) */
     --text-muted: #6B7280;      /* Gris moyen (pour l'accroche et les détails) */
     --border-color: #E5E7EB;    /* Gris très clair pour les séparations discrètes */
