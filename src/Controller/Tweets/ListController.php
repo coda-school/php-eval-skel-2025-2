@@ -22,7 +22,6 @@ final class ListController extends AbstractController
         TweetsService $tweetService,
         TweetsService $tweetsService,
         LikesService $likesService,
-        TweetsService $searchTweets,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] int $limit = 5
     ): Response
