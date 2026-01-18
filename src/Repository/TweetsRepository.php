@@ -7,25 +7,25 @@ use App\Entity\Likes;
 use App\Entity\Tweets;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 
 class TweetsRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly EntityManagerInterface $em)
     {
         parent::__construct($registry, Tweets::class);
     }
 
-    public function findTweetsForUserFromUsersFollowed(User $user, int $page, int $limit): array
+    public function findTweetsFromFollowed(User $user, int $page, int $limit): array
     {
         return $this
             ->createQueryBuilder('t')
             ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
-            ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId')
+            ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId AND f.isDeleted = false')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
-            ->andWhere('f.isDeleted = false')
             ->andWhere('t.isDeleted = false')
             ->groupBy('t.id', 'u.username')
             ->orderBy('t.createdDate', 'DESC')
@@ -36,15 +36,44 @@ class TweetsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function nbTotalTweetsForUserFromUsersFollowed(User $user): int
+    public function findTweetsForSuggestion (User $user, int $page, int $limit): array
+    {
+        // subquery pour récupérer nos followers puis les exclure des tweets suggérés,
+        // on doit utiliser entityManager parce qu'on part d'une autre table que Tweets
+        $subQuery = $this->em->createQueryBuilder()
+            ->select('user.id')
+            ->from(Follows::class, 'f')
+            ->innerJoin('f.followed', 'user') // Doctrine fait le lien automatiquement
+            ->where('f.follower = :user')
+            ->andWhere('f.isDeleted = false');
+
+
+        return $this
+            ->createQueryBuilder('t')
+            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->innerJoin('t.createdBy', 'u')
+            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
+            ->andWhere('u.id != :user')
+            ->andWhere(($this->createQueryBuilder('t')->expr()->notIn('u.id', $subQuery->getDQL())))
+            ->andWhere('t.isDeleted = false')
+            ->groupBy('t.id', 'u.username')
+            ->orderBy('t.createdDate', 'DESC')
+            ->setParameter('user', $user)
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function nbTotalTweetsFromFollowed (User $user): int
     {
         return $this
             ->createQueryBuilder('t')
             ->select('COUNT(t.id)')
             ->innerJoin(Follows::class, 'f', 'WITH', 't.createdBy = f.followed AND f.isDeleted = false')
             ->andWhere('t.isDeleted = false')
-            ->andWhere('f.createdBy = :userId')
-            ->setParameter('userId', $user->getId())
+            ->andWhere('f.follower = :user')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getSingleScalarResult();
     }

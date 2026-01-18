@@ -19,11 +19,10 @@ final class ListController extends AbstractController
     #[Route('/tweets', name: 'tweets_list', methods: ['GET', 'POST'])]
     public function index(
         Request       $request,
-        TweetsService $tweetService,
         TweetsService $tweetsService,
         LikesService $likesService,
         #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] int $limit = 5
+        #[MapQueryParameter] int $limit = 10
     ): Response
     {
         $tweetDTO = new TweetDTO();
@@ -34,7 +33,7 @@ final class ListController extends AbstractController
         // traitement du formulaire par symfony, validations, etc.
         $form->handleRequest($request);
 
-        $formSearch = $this->CreateForm(SearchType::class);
+        $formSearch = $this->createForm(SearchType::class);
         $formSearch->handleRequest($request);
 
         if ($formSearch->isSubmitted() && $formSearch->isValid()) {
@@ -50,7 +49,7 @@ final class ListController extends AbstractController
             $tweet = null;
             try {
                 // traitements métier pour créer le tweet via le service TweetsService
-                $tweet = $tweetService->createTweet($tweetDTO, $this->getUser());
+                $tweet = $tweetsService->createTweet($tweetDTO, $this->getUser());
             } catch (\Exception $e) {
                 // en cas d'erreur, ajout d'un message flash pour indiquer l'erreur
                 $this->addFlash('error', 'Erreur lors de la création du tweet');
@@ -68,19 +67,17 @@ final class ListController extends AbstractController
 
         $connectedUser = $this->getUser();
 
-        $tweetsFollowed = $tweetsService->findTweetsForUserFromUsersFollowed($connectedUser, $page, $limit);
+        $tweetsForThread = $tweetsService->findTweetsForThread($connectedUser, $page, $limit);
 
-        foreach ($tweetsFollowed as $key => $tweet) {
+        foreach ($tweetsForThread as $key => $tweet) {
             $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
-            $tweetsFollowed[$key]['isLikedByMe'] = ($isLiked !== null);
+            $tweetsForThread[$key]['isLikedByMe'] = ($isLiked !== null);
         }
 
-        $ndTotalTweets = $tweetService->nbTotalTweetsForUserFromUsersFollowed($connectedUser);
+        $maxPaginationPage = $tweetsService->nbTotalPagesForThread($connectedUser, $limit);
 
-        if ($ndTotalTweets <= $limit) {
+        if ($maxPaginationPage <= 1) {
             $maxPaginationPage = 1;
-        } else {
-            $maxPaginationPage = ceil($ndTotalTweets / $limit);
         }
 
         $top5Tweets = $tweetsService->findTop5LikeTweets();
@@ -93,7 +90,7 @@ final class ListController extends AbstractController
         return $this->render('tweets/list/index.html.twig', [
             'formSearch' => $formSearch,
             'form' => $form,
-            'tweets' => $tweetsFollowed,
+            'tweets' => $tweetsForThread,
             'top5Tweets' => $top5Tweets,
             'limit' => $limit,
             'page' => $page,

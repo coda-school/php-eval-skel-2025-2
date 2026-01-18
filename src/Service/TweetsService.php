@@ -49,12 +49,38 @@ class TweetsService
         $this->em->flush();
     }
 
-    public function findTweetsForUserFromUsersFollowed(User $user, int $page, int $limit): array {
-        return $this->tweetsRepository->findTweetsForUserFromUsersFollowed($user, $page, $limit);
+    public function findTweetsForThread(User $user, int $page, int $limit): array {
+        $limitFollowed = (80/100) * $limit;
+        $limitSuggested = (20/100) * $limit;
+
+        $followedTweets = $this->tweetsRepository->findTweetsFromFollowed($user, $page, $limitFollowed);
+        $suggestedTweets = $this->tweetsRepository->findTweetsForSuggestion($user, $page, $limitSuggested);
+
+        foreach ($followedTweets as $key => $tweet) {
+            $followedTweets[$key]['isSuggestion'] = false;
+        }
+
+        foreach ($suggestedTweets as $key => $tweet) {
+            $suggestedTweets[$key]['isSuggestion'] = true;
+        }
+
+        // on fusionne les deux tableaux
+        $thread = array_merge($followedTweets, $suggestedTweets);
+
+        // tri du tableau par ordre DESC (date la plus récente en premier)
+        usort($thread, function ($a, $b) {
+            return $b['createdDate'] <=> $a['createdDate'];
+        });
+
+        return $thread;
+
     }
 
-    public function nbTotalTweetsForUserFromUsersFollowed(User $user): int {
-        return $this->tweetsRepository->nbTotalTweetsForUserFromUsersFollowed($user);
+    public function nbTotalPagesForThread(User $user, int $limit): int {
+        $limitFollowed = (80/100) * $limit;
+        $totalTweetsFollowed = $this->tweetsRepository->nbTotalTweetsFromFollowed($user);
+
+        return $totalPages = ceil($totalTweetsFollowed / $limitFollowed);
     }
 
     public function findTop5LikeTweets(): array {

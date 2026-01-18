@@ -21,6 +21,7 @@
     {% for tweet in tweets %}
         <p>
             {{ tweet.authorName }}
+            {{ tweet.isSuggestion ? '(suggestion)' : '' }}
             {{ tweet.message }}
             {{ tweet.createdDate | ago(locale='fr') }}
             <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
