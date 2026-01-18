@@ -8,7 +8,7 @@
 
     {{ form_start(form) }}
     <div class="form-group">
-        {{ form_widget(form.message, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'maxlength' : '280'}}) }}
         {{ form_errors(form.message) }}
     </div>
     <div class="actions" style="margin-top: 20px">
@@ -24,6 +24,7 @@
             {{ tweet.isSuggestion ? '(suggestion)' : '' }}
             {{ tweet.message }}
             {{ tweet.createdDate | ago(locale='fr') }}
+            {{ tweet.updatedDate ? '(modifié)' : '' }}
             <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
                 {{ tweet.isLikedByMe ? '♥' : '♡' }}
             </a>
@@ -50,6 +51,7 @@
             {{ tweet.authorName }}
             {{ tweet.message }}
             {{ tweet.createdDate | ago(locale='fr') }}
+            {{ tweet.updatedDate ? '(modifié)' : '' }}
             <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
                 {{ tweet.isLikedByMe ? '♥' : '♡' }}
             </a>

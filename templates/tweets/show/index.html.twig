@@ -7,6 +7,11 @@
         <h1>Tweet de {{ tweet.authorName }}</h1>
         <p>{{ tweet.message }}</p>
         <p>Posté {{ tweet.createdDate | ago(locale='fr') }}</p>
+        <p>
+            {% if tweet.updatedDate %}
+            Modifié {{ tweet.updatedDate | ago(locale='fr') }}
+            {% endif %}
+        </p>
         <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
             {{ isLikedByMe ? '♥' : '♡' }}
         </a>

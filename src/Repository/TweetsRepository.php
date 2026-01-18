@@ -22,7 +22,7 @@ class TweetsRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId AND f.isDeleted = false')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
@@ -50,7 +50,7 @@ class TweetsRepository extends ServiceEntityRepository
 
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('u.id != :user')
@@ -84,7 +84,7 @@ class TweetsRepository extends ServiceEntityRepository
 
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid', 't.id as id','t.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName', 't.uid as uid', 't.id as id','t.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false AND l.createdDate >= :dateLimit')
             ->andWhere('t.isDeleted = false')
@@ -99,7 +99,7 @@ class TweetsRepository extends ServiceEntityRepository
     public function findTweetsFromUser(User $user): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy AND u.id = :userId')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.isDeleted = false')
@@ -113,7 +113,7 @@ class TweetsRepository extends ServiceEntityRepository
     public function searchTweets(string $search): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 't.id as id', 'u.username as authorName', 't.uid as uid', 't.message as message', 't.createdDate as createdDate', 'COUNT(l.id) as totalLikes')
+            ->select('t', 't.id as id', 'u.username as authorName', 't.uid as uid', 't.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
             ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.message LIKE :search')
@@ -125,7 +125,7 @@ class TweetsRepository extends ServiceEntityRepository
     public function getTweetByUid (string $tweetUid): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 'u.id as authorId', 'COUNT(l.id) as totalLikes')
+            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'u.id as authorId', 'COUNT(l.id) as totalLikes')
             ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.uid = :tweetUid')

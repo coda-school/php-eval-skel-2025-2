@@ -32,7 +32,7 @@ final class ShowController extends AbstractController
 
         $nbOfFollowed = sizeof($followedOfUser);
 
-        $followersOfUser = $userService->findUsersWhoFolloweMe($user);
+        $followersOfUser = $userService->findUsersWhoFollowMe($user);
 
         $nbOfFollowers = sizeof($followersOfUser);
 

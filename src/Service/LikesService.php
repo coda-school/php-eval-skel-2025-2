@@ -6,7 +6,6 @@ use App\Entity\Likes;
 use App\Entity\Tweets;
 use App\Entity\User;
 use App\Repository\LikesRepository;
-use App\Repository\TweetsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LikesService

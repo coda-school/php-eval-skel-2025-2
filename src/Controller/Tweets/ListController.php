@@ -3,7 +3,6 @@
 namespace App\Controller\Tweets;
 
 use App\DTO\TweetDTO;
-use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\TweetType;
 use App\Service\LikesService;

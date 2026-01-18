@@ -25,7 +25,7 @@ class UserService
         return $this->userRepository->findUsersIFollow($user);
     }
 
-    public function findUsersWhoFolloweMe(User $user): array {
+    public function findUsersWhoFollowMe(User $user): array {
         return $this->userRepository->findUsersWhoFolloweMe($user);
     }
 

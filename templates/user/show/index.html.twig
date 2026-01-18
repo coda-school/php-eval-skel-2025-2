@@ -39,6 +39,7 @@
             {{ tweet.authorName }}
             {{ tweet.message }}
             {{ tweet.createdDate | ago(locale='fr') }}
+            {{ tweet.updatedDate ? '(modifié)' : '' }}
             <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">{{ tweet.isLikedByMe ? '♥' : '♡' }}</a>
             {{ tweet.totalLikes }}
             <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}">
