@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-    {% include "_components/_flash_messages.html.twig" %}
+
 
     <div class="in-app-container">
         {# Le menu reste fixe à gauche #}
@@ -17,6 +17,7 @@
 
         {# Le contenu principal décalé #}
         <main class="main-content">
+            {% include "_components/_flash_messages.html.twig" %}
             {% block content %}{% endblock %}
         </main>
     </div>
