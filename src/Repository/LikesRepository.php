@@ -20,7 +20,7 @@ class LikesRepository extends ServiceEntityRepository
     public function findIfUserLikeTweet (User $user, int $tweetId): ?Likes {
         return $this
             ->createQueryBuilder('l')
-            ->innerJoin (User::class, 'u', 'WITH', 'l.createdBy = :userId')
+            ->andWhere('l.createdBy = :userId')
             ->andwhere('l.tweet = :tweet')
             ->andWhere('l.isDeleted = false')
             ->setParameter('userId', $user->getId())
@@ -28,5 +28,4 @@ class LikesRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
 }

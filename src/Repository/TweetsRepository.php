@@ -18,16 +18,25 @@ class TweetsRepository extends ServiceEntityRepository
         parent::__construct($registry, Tweets::class);
     }
 
+    private const SELECT = ['u.username as authorName',
+                             'u.id as authorId',
+                             't.uid as uid',
+                             't.id as id',
+                             't.message as message',
+                             't.createdDate as createdDate',
+                             't.updatedDate as updatedDate',
+                             'COUNT(l.id) as totalLikes'];
+
     public function findTweetsFromFollowed(User $user, int $page, int $limit): array
     {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
+            ->select(self::SELECT)
             ->innerJoin('t.createdBy', 'u')
             ->innerJoin(Follows::class, 'f', 'WITH', 'f.followed = t.createdBy AND f.follower = :userId AND f.isDeleted = false')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.isDeleted = false')
-            ->groupBy('t.id', 'u.username')
+            ->groupBy('t.id', 'u.username', 'u.id')
             ->orderBy('t.createdDate', 'DESC')
             ->setParameter('userId', $user->getId())
             ->setFirstResult(($page - 1) * $limit)
@@ -41,22 +50,22 @@ class TweetsRepository extends ServiceEntityRepository
         // subquery pour récupérer nos followers puis les exclure des tweets suggérés,
         // on doit utiliser entityManager parce qu'on part d'une autre table que Tweets
         $subQuery = $this->em->createQueryBuilder()
-            ->select('user.id')
+            ->select('followedUser.id')
             ->from(Follows::class, 'f')
-            ->innerJoin('f.followed', 'user') // Doctrine fait le lien automatiquement
-            ->where('f.follower = :user')
+            ->innerJoin('f.followed', 'followedUser')
+            ->andwhere('f.follower = :user')
             ->andWhere('f.isDeleted = false');
 
 
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid','t.id as id','t.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
+            ->select(self::SELECT)
             ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('u.id != :user')
             ->andWhere(($this->createQueryBuilder('t')->expr()->notIn('u.id', $subQuery->getDQL())))
             ->andWhere('t.isDeleted = false')
-            ->groupBy('t.id', 'u.username')
+            ->groupBy('t.id', 'u.username', 'u.id')
             ->orderBy('t.createdDate', 'DESC')
             ->setParameter('user', $user)
             ->setFirstResult(($page - 1) * $limit)
@@ -84,11 +93,11 @@ class TweetsRepository extends ServiceEntityRepository
 
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName', 't.uid as uid', 't.id as id','t.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
+            ->select(self::SELECT)
             ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false AND l.createdDate >= :dateLimit')
             ->andWhere('t.isDeleted = false')
-            ->groupBy('t.id', 'u.username')
+            ->groupBy('t.id', 'u.username', 'u.id')
             ->orderBy('totalLikes', 'DESC')
             ->setParameter('dateLimit', $dateLimit)
             ->setMaxResults(5)
@@ -99,12 +108,12 @@ class TweetsRepository extends ServiceEntityRepository
     public function findTweetsFromUser(User $user): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
-            ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy AND u.id = :userId')
+            ->select(self::SELECT)
+            ->innerJoin('t.createdBy', 'u', 'WITH', 'u.id = :userId')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.isDeleted = false')
             ->orderBy('t.createdDate', 'DESC')
-            ->groupBy('t.id', 'u.username')
+            ->groupBy('t.id', 'u.username', 'u.id')
             ->setParameter('userId', $user->getId())
             ->getQuery()
             ->getResult();
@@ -113,20 +122,22 @@ class TweetsRepository extends ServiceEntityRepository
     public function searchTweets(string $search): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 't.id as id', 'u.username as authorName', 't.uid as uid', 't.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'COUNT(l.id) as totalLikes')
-            ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy')
+            ->select(self::SELECT)
+            ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.message LIKE :search')
-            ->groupBy('t.id', 'u.username')
+            ->andWhere('t.isDeleted = false')
+            ->groupBy('t.id', 'u.username', 'u.id')
             ->setParameter('search', '%' . $search . '%')
             ->getQuery()
             ->getResult();
     }
+
     public function getTweetByUid (string $tweetUid): array {
         return $this
             ->createQueryBuilder('t')
-            ->select('t', 'u.username as authorName','t.uid as uid', 't.id as id', 't.message as message', 't.createdDate as createdDate', 't.updatedDate as updatedDate', 'u.id as authorId', 'COUNT(l.id) as totalLikes')
-            ->innerJoin(User::class, 'u', 'WITH', 'u.id = t.createdBy')
+            ->select(self::SELECT)
+            ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
             ->andWhere('t.uid = :tweetUid')
             ->andWhere('t.isDeleted = false')
@@ -135,6 +146,4 @@ class TweetsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
-
 }

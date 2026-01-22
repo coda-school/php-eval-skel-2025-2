@@ -19,15 +19,13 @@ class FollowsRepository extends ServiceEntityRepository
     public function findIfFollowerFollowFollowed (string $followerName, string $followedName): ?Follows {
         return $this
             ->createQueryBuilder('f')
-            ->innerJoin('f.follower', 'u_follower')
-            ->innerJoin('f.followed', 'u_followed')
-            ->andwhere('u_follower.username = :followerName')
-            ->andWhere('u_followed.username = :followedName')
+            ->innerJoin('f.follower', 'u_follower', 'WITH', 'u_follower.username = :followerName')
+            ->innerJoin('f.followed', 'u_followed', 'WITH', 'u_followed.username = :followedName')
             ->andWhere('f.isDeleted = false')
             ->setParameter('followerName', $followerName)
             ->setParameter('followedName', $followedName)
             ->getQuery()
             ->getOneOrNullResult();
-        }
+    }
 
 }
