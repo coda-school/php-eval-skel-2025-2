@@ -30,7 +30,7 @@
 
 body {
     font-family: var(--font-main), sans-serif;
-    background-color: var(--bg-white);
+    background-color: var(--white);
     color: var(--text-main);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;

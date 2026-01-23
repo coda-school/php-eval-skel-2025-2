@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\DTO\UserDTO;
 use App\Entity\User;
+use App\Form\SearchType;
 use App\Form\UserType;
 use App\Service\UserService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -22,6 +23,14 @@ final class EditController extends AbstractController
         Request $request
     ): Response
     {
+        $formSearch = $this->createForm(SearchType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $search = $formSearch->getData();
+            return $this->redirectToRoute('search_tweets', ['search' => $search['rechercher']]);
+        }
+
         $connectedUser = $this->getUser();
 
         if ($user->getUsername() !== $connectedUser->getUsername()) {
@@ -47,6 +56,7 @@ final class EditController extends AbstractController
         }
 
         return $this->render('user/edit/index.html.twig', [
+            'formSearch' => $formSearch,
             'form' => $form,
             'user' => $user
         ]);

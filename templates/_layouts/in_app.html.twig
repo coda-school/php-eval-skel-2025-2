@@ -4,8 +4,10 @@
 {% block stylesheets %}
     {# On garde le main pour les variables de couleurs, mais on vire le reste #}
     <link rel="stylesheet" href="{{ asset('styles/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/layouts/inapp.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/components/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/components/boutons.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/components/header.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -15,10 +17,14 @@
         {# Le menu reste fixe à gauche #}
         {% include "_components/menu.html.twig" %}
 
+
         {# Le contenu principal décalé #}
         <main class="main-content">
-            {% include "_components/_flash_messages.html.twig" %}
-            {% block content %}{% endblock %}
+            {% include "_components/header.html.twig" %}
+            <div class="content-wrapper">
+                {% include "_components/_flash_messages.html.twig" %}
+                {% block content %}{% endblock %}
+            </div>
         </main>
     </div>
 {% endblock %}

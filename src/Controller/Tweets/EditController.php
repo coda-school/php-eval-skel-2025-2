@@ -4,6 +4,7 @@ namespace App\Controller\Tweets;
 
 use App\DTO\TweetDTO;
 use App\Entity\Tweets;
+use App\Form\SearchType;
 use App\Form\TweetType;
 use App\Service\TweetsService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -22,6 +23,14 @@ final class EditController extends AbstractController
         TweetsService $tweetsService
     ): Response
     {
+        $formSearch = $this->createForm(SearchType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $search = $formSearch->getData();
+            return $this->redirectToRoute('search_tweets', ['search' => $search['rechercher']]);
+        }
+
         $connectedUser = $this->getUser();
 
         if ($tweets->getCreatedBy() !== $connectedUser) {
@@ -49,6 +58,7 @@ final class EditController extends AbstractController
         }
 
         return $this->render('tweets/edit/index.html.twig', [
+            'formSearch' => $formSearch,
             'form' => $form,
             'tweets' => $tweets,
         ]);

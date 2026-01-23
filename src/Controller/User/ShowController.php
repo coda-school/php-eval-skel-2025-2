@@ -3,27 +3,38 @@
 namespace App\Controller\User;
 
 use App\Entity\User;
+use App\Form\SearchType;
 use App\Service\FollowsService;
 use App\Service\LikesService;
 use App\Service\TweetsService;
 use App\Service\UserService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ShowController extends AbstractController
 {
-    #[Route('/user/{username}', name: 'user_show', methods: ['GET'])]
+    #[Route('/user/{username}', name: 'user_show', methods: ['GET', 'POST'])]
     public function index(
         #[MapEntity(mapping: ['username' => 'username'])]
         User $user,
+        Request $request,
         UserService $userService,
         TweetsService $tweetsService,
         FollowsService $followsService,
         LikesService $likesService
     ): Response
     {
+        $formSearch = $this->createForm(SearchType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $search = $formSearch->getData();
+            return $this->redirectToRoute('search_tweets', ['search' => $search['rechercher']]);
+        }
+
         $informationsOfUser = $userService->getUserInformations($user);
 
         $tweetsOfUser = $tweetsService->findTweetsFromUser($user);
@@ -50,6 +61,7 @@ final class ShowController extends AbstractController
         }
 
         return $this->render('user/show/index.html.twig', [
+            'formSearch' => $formSearch,
             'informations' => $informationsOfUser,
             'tweets' => $tweetsOfUser,
             'followed' => $followedOfUser,

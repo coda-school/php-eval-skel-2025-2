@@ -1,0 +1,239 @@
+/* assets/styles/components/header.css */
+
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    /* On le cale à droite du menu (260px) */
+    position: fixed; /* Fixed est plus radical pour un bandeau complet */
+    top: 0;
+    left: 260px;
+
+    /* Il prend toute la largeur moins le menu */
+    width: calc(100% - 260px);
+    height: 80px;
+
+    padding: 0 40px;
+    box-sizing: border-box; /* Important pour que le padding ne dépasse pas */
+
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* assets/styles/components/header.css */
+
+.header-left h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -2px;
+    padding: 0.1em 0.2em;
+
+    /* On crée un dégradé qui contient tes 3 verts */
+    background: linear-gradient(
+        to right,
+        var(--secondary-green) 0%,
+        var(--primary-green) 25%,
+        var(--accent-green) 50%,
+        var(--primary-green) 75%,
+        var(--secondary-green) 100%
+    );
+
+    /* On agrandit le background pour pouvoir le faire glisser */
+    background-size: 200% auto;
+
+    /* On coupe le background pour qu'il ne remplisse que le texte */
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    /* On rend le texte transparent pour voir le dégradé derrière */
+    -webkit-text-fill-color: transparent;
+
+    /* L'animation de balayage */
+    animation: sweep 4s linear infinite;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+@keyframes sweep {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.header-right {
+    width: 350px;
+}
+
+/* On garde ton style terminal pour l'input */
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa; /* Gris très clair, presque blanc */
+    padding: 10px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--primary-green);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.search-field {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: 'Courier New', monospace;
+    color: var(--secondary-green); /* Texte vert foncé pour la lisibilité */
+}
+
+/* Style du placeholder */
+.search-field::placeholder {
+    color: #666;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.search-submit {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper:focus-within .search-submit {
+    color: var(--primary-green);
+    filter: drop-shadow(0 0 5px var(--primary-green));
+}
+
+/*Troll loading*/
+/* assets/styles/components/header.css */
+
+.header-troll-loader {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 50px;
+}
+
+.loader-container {
+    width: 100%;
+    max-width: 300px;
+    height: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* La barre de fond */
+.loader-container::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.05);
+    bottom: 0;
+}
+
+/* La barre qui progresse (et qui troll) */
+.loader-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--primary-green);
+    width: 0%;
+    animation: trollProgress 20s infinite;
+    box-shadow: 0 0 8px var(--accent-green);
+}
+
+/* Les textes */
+.loader-text, .chaos-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    position: absolute;
+    top: -15px;
+}
+
+.loader-text {
+    color: var(--text-muted);
+    animation: fadeOutChaos 20s infinite;
+}
+
+.chaos-text {
+    color: var(--primary-green);
+    font-weight: bold;
+    opacity: 0;
+    animation: fadeInChaos 20s infinite;
+}
+
+/* L'ANIMATION TROLL */
+/* L'ANIMATION TROLL AVEC HOQUETS */
+@keyframes trollProgress {
+    0%   { width: 0%; }
+    5%   { width: 12%; }
+    7%   { width: 8%; }   /* Petit hoquet */
+    15%  { width: 35%; }
+    17%  { width: 30%; }  /* Recul */
+    25%  { width: 32%; }  /* Stagnation nerveuse */
+    40%  { width: 60%; }
+    42%  { width: 55%; }
+    43%  { width: 58%; }  /* Micro-sursaut */
+    50%  { width: 85%; }
+    52%  { width: 10%; }  /* LA CATASTROPHE : Retour quasi au début */
+    65%  { width: 45%; }
+    68%  { width: 40%; }
+    80%  { width: 92%; }
+    82%  { width: 88%; }  /* Le hoquet de la dernière chance */
+    88%  { width: 98%; }
+    93%  { width: 99%; }  /* Le supplice du 99% */
+    96%  { width: 100%; } /* Enfin... */
+    100% { width: 100%; }
+}
+
+/* On ajuste les textes pour qu'ils suivent ce rythme chaotique */
+@keyframes fadeOutChaos {
+    0%, 95% { opacity: 1; filter: blur(0px); }
+    93% { opacity: 1; filter: blur(1px); } /* Flou avant de disparaître */
+    96%, 100% { opacity: 0; }
+}
+
+@keyframes fadeInChaos {
+    0%, 95% {
+        opacity: 0;
+        transform: scale(0.8) translateY(5px);
+    }
+    96% {
+        opacity: 1;
+        transform: scale(1.2) translateY(0);
+        color: var(--accent-green); /* Flash plus clair au début */
+    }
+    98% {
+        opacity: 1;
+        transform: scale(1);
+        color: var(--primary-green);
+        text-shadow: 0 0 10px var(--primary-green);
+    }
+    100% {
+        opacity: 0;
+    }
+}

@@ -1,11 +1,15 @@
-/* Pour éviter que le menu (fixed) ne cache le contenu */
-.in-app-layout {
-    display: flex;
-    min-height: 100vh;
-}
+/* assets/styles/inapp.css */
 
 .main-content {
-    margin-left: 260px; /* La largeur de ton side-menu */
+    margin-left: 260px; /* Laisse la place au menu fixe */
     flex: 1;
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.content-wrapper {
+    /* C'est ici qu'on crée l'espace pour que le header ne cache rien */
+    /* 80px (hauteur header) + 40px de marge de confort */
+    padding: 80px 2rem 2rem 2rem;
 }

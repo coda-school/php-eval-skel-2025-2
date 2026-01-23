@@ -23,7 +23,6 @@ class SearchType extends AbstractType
                 ],
                 'required' => false,
             ])
-            ->add('submit', SubmitType::class)
         ;
     }
 

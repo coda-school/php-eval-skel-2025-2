@@ -1,0 +1,32 @@
+{# _header.html.twig #}
+{% set current_route = app.request.attributes.get('_route') %}
+
+<header class="top-header">
+    <div class="header-left">
+        <h1>Y</h1>
+    </div>
+
+    <div class="header-troll-loader">
+        <div class="loader-container">
+            <div class="loader-bar"></div>
+            <div class="loader-text">LOADING...</div>
+            <div class="chaos-text">CHAOS</div>
+        </div>
+    </div>
+
+    <div class="header-right">
+        {{ form_start(formSearch, {'attr': {'class': 'search-form'}}) }}
+        <div class="search-input-wrapper">
+            {{ form_widget(formSearch.rechercher, {
+                'attr': {
+                    'placeholder': 'Rechercher dans le chaos...',
+                    'class': 'search-field'
+                }
+            }) }}
+            <button type="submit" class="search-submit">
+                <span class="icon">⌕</span>
+            </button>
+        </div>
+        {{ form_end(formSearch) }}
+    </div>
+</header>
