@@ -4,7 +4,9 @@
 
 {% block content %}
     <article class="single-tweet">
-        <h1>Tweet de {{ tweet.authorName }}</h1>
+        <h1>Tweet de
+            <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
+        </h1>
         <p>{{ tweet.message }}</p>
         <p>Posté {{ tweet.createdDate | ago(locale='fr') }}</p>
         <p>

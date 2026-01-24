@@ -5,7 +5,7 @@
 {% block content %}
 
 {% for tweet in listTweets %}
-    {{ tweet.authorName }}
+    <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
     {{ tweet.message }}
     {{ tweet.createdDate | ago(locale='fr')}}
     <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
