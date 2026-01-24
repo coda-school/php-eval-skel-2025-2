@@ -107,6 +107,20 @@ class AppFixtures extends Fixture
         $tweet->setUid(Uuid::v7()->toString());
         $tweet->setMessage($message);
 
+        // 1. Lister les images existantes dans le dossier
+        $imagePath = __DIR__ . '/../../public/uploads/tweets';
+
+        // On récupère les fichiers, en excluant les dossiers "." et ".."
+        $files = array_diff(scandir($imagePath), ['.', '..']);
+
+        if (!empty($files)) {
+            // 2. Choisir une image au hasard 1 fois sur 2 (pour ne pas en avoir partout)
+            if (rand(0, 1)) {
+                $randomImage = $files[array_rand($files)];
+                $tweet->setImage($randomImage);
+            }
+        }
+
         $author = $this->generatedUsers[array_rand($this->generatedUsers)];
         $tweet->setCreatedBy($author);
         $tweet->setCreatedDate(new \DateTime());
