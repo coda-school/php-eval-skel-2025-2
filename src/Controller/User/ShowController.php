@@ -37,23 +37,20 @@ final class ShowController extends AbstractController
 
         $informationsOfUser = $userService->getUserInformations($user);
 
-        $tweetsOfUser = $tweetsService->findTweetsFromUser($user);
-
         $followedOfUser = $userService->findUsersIFollow($user);
-
         $nbOfFollowed = sizeof($followedOfUser);
 
         $followersOfUser = $userService->findUsersWhoFollowMe($user);
-
         $nbOfFollowers = sizeof($followersOfUser);
 
         $connectedUser = $this->getUser();
-
         $isFollowed = false;
 
         if ($connectedUser !== $user) {
             $isFollowed = $followsService->findIfFollowerFollowFollowed($connectedUser->getUsername(), $user->getUsername());
         }
+
+        $tweetsOfUser = $tweetsService->findTweetsFromUser($user);
 
         foreach ($tweetsOfUser as $key => $tweet) {
             $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
