@@ -1,0 +1,109 @@
+.error-page {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #0a0a0a; /* Ton fond noir profond */
+    overflow: hidden;
+}
+
+/* On utilise un pseudo-élément pour la grille pour pouvoir l'animer indépendamment */
+.error-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%; /* Plus large pour l'animation de translation */
+    height: 200%;
+    /* Création de la grille rouge */
+    background-image:
+        linear-gradient(to right, rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px; /* Taille des carreaux */
+
+    /* On incline la grille pour donner de la perspective comme sur l'accueil */
+    transform: perspective(500px) rotateX(60deg) translateY(-50%);
+    transform-origin: top;
+
+    /* L'animation */
+    animation: grid-move 20s linear infinite;
+    z-index: 0;
+}
+
+@keyframes grid-move {
+    from { transform: perspective(500px) rotateX(60deg) translateY(-50%); }
+    to { transform: perspective(500px) rotateX(60deg) translateY(0%); }
+}
+
+.error-container {
+    position: relative;
+    z-index: 1;
+    background: #0a0a0a;
+    border: 1px solid #ff4d4d;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 0 30px rgba(255, 77, 77, 0.2);
+}
+
+.terminal-header {
+    background: #1a1a1a;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #ff4d4d;
+}
+
+.error-content {
+    padding: 40px;
+    font-family: 'Courier New', monospace;
+}
+
+.glitch {
+    font-size: 4rem;
+    color: #ff4d4d;
+    position: relative;
+    text-shadow: 2px 0 0 rgba(0,255,255,0.5);
+    animation: glitch-anim 0.3s infinite;
+}
+
+.title {
+    color: #ff4d4d;
+}
+
+.error-details {
+    margin: 30px 0;
+    color: #ff4d4d;
+    opacity: 0.8;
+}
+
+.chaos-dump {
+    font-size: 0.7rem;
+    color: rgba(255, 77, 77, 0.3);
+    word-break: break-all;
+    margin-bottom: 30px;
+    border-left: 2px solid rgba(255, 77, 77, 0.3);
+    padding-left: 10px;
+}
+
+/* Animation de Glitch */
+@keyframes glitch-anim {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+.error-content .deploy-btn {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.error-content .deploy-btn:hover {
+    background: #ff4d4d;
+    color: white;
+}

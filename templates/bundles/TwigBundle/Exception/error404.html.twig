@@ -1,17 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Erreur {{ status_code }} | Page Non Trouvée
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/exceptions/error.css') }}">
 {% endblock %}
 
+{% block title %}CRITICAL_FAILURE | {{ status_code }}{% endblock %}
+
 {% block body %}
-    <h1>Oups ! Une erreur est survenue.</h1>
-    <p>Code {{ status_code }}</p>
-    <h2>Page introuvable</h2>
-    <p>Il semble que le chemin que vous suivez n'est pas le bon.</p>
-    <div>
-        <a href="{{ path('tweets_list') }}">
-            Retourner à l'accueil
-        </a>
-    </div>
+    <section class="error-page">
+        <div class="error-container">
+            <div class="terminal-header">
+                <span class="title">KERNEL_PANIC_REPORT</span>
+            </div>
+
+            <div class="error-content">
+                <h1 class="glitch" data-text="ERROR_{{ status_code }}">ERROR_{{ status_code }}</h1>
+
+                <div class="error-details">
+                    <p class="status-line">> [STATUS]: CRITICAL_CLIENT_ERR</p>
+                    <p class="status-line">> [LOCATION]: *****************</p>
+                    <p class="status-line">> [ACTION]: REBOOT_REQUIRED</p>
+                </div>
+
+                <div class="chaos-dump">
+                    fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg154fd654f6d54f654df6d54f654df654df654df654d4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4
+                </div>
+
+                <div class="actions">
+                    <a href="{{ path('tweets_list') }}" class="deploy-btn">
+                        [ FORCE_REBOOT ]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

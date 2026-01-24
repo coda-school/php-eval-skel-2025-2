@@ -1,0 +1,179 @@
+/* assets/styles/pages/home.css */
+
+/* 1. Zone de création (L'encart) */
+.creation-zone {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.terminal-prompt {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    margin-bottom: 25px;
+    color: #666;
+}
+
+.terminal-prompt .user { color: var(--primary-green); font-weight: bold; }
+.terminal-prompt .path { color: var(--secondary-green); }
+
+/* 2. Style du formulaire */
+.kernel-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Permet au footer de passer à la ligne */
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.cursor-prefix {
+    color: var(--primary-green);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1.2rem;
+    animation: scintillement 1s step-end infinite;
+}
+
+.kernel-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    /* Les propriétés magiques pour le retour à la ligne */
+    white-space: pre-wrap;      /* Respecte les espaces et revient à la ligne */
+    overflow-wrap: break-word; /* Casse les mots trop longs pour éviter de déborder */
+    word-break: break-word;
+    resize: vertical;
+    color: var(--secondary-green);
+    caret-color: var(--primary-green);
+    padding-top: 2px;
+    min-width: 200px;
+    display: block;
+    width: 100%; /* On lui dit clairement de prendre la largeur */
+    box-sizing: border-box;
+
+}
+
+/* 3. Footer et bouton EXECUTE */
+.kernel-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.deploy-btn {
+    background: transparent;
+    border: 1px solid var(--secondary-green);
+    color: var(--secondary-green);
+    padding: 10px 25px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.deploy-btn:hover {
+    background: var(--secondary-green);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+/* 4. Le Séparateur Dynamique (Marquee CSS) */
+.dynamic-separator {
+    width: 100%;
+    height: 30px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    margin: 30px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    user-select: none;
+}
+
+.ticker-wrap {
+    white-space: nowrap;
+}
+
+.ticker-item {
+    display: inline-block;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--primary-green);
+    opacity: 0.4;
+    padding-right: 50px;
+    animation: marquee 30s linear infinite;
+}
+
+/* 5. Animations */
+
+/* Le clignotement du curseur > */
+@keyframes scintillement {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Le défilement infini du séparateur */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* 6. Feedback visuel sans JS (Optionnel) */
+/* Si le champ est focus, on illumine un peu la zone */
+.creation-zone:focus-within {
+    border-color: var(--primary-green);
+    box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.05);
+}
+
+/* --- Animation de la barre de progression (Simulée) --- */
+
+.char-count-container {
+    flex: 1;
+    margin-right: 20px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.char-bar {
+    height: 100%;
+    width: 2%;
+    background: #eee;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+}
+
+/* 2. État : Au clic (Focus) - On montre que le système est prêt */
+.input-wrapper:has(.kernel-input:focus) .char-bar {
+    background: var(--primary-green);
+    width: 20%;
+    opacity: 0.7;
+}
+
+/* 3. État : Saisie en cours (Dès qu'on tape 1 lettre) */
+.input-wrapper:has(.kernel-input:not(:placeholder-shown)) .char-bar {
+    background: var(--primary-green);
+    width: 65%;
+    opacity: 1;
+    box-shadow: 0 0 10px var(--primary-green);
+}
+
+/*------------------------------------------*/
+/*------------------------------------------*/
+/*------------------------------------------*/

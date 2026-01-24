@@ -1,19 +1,55 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Hello Tweets/ListController!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/inapp/accueil.css') }}">
+{% endblock %}
+
+{% block title %}Accueil - {{ app.user.username }}{% endblock %}
 
 {% block content %}
-    {{ form_start(form) }}
-    <div class="form-group">
-        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'maxlength' : '280'}}) }}
-        {{ form_errors(form.message) }}
-    </div>
-    <div class="actions" style="margin-top: 20px">
-        <button type="submit">Créer</button>
-    </div>
-    {{ form_end(form) }}
+    {# templates/home/index.html.twig #}
 
-    <h1>Thread</h1>
+    <section class="creation-zone">
+        <div class="terminal-prompt">
+            <span class="user">USER@{{ app.user.username }}</span>:<span class="path">~</span>$ <span class="command">write-thread</span>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'kernel-form'}}) }}
+        <div class="input-wrapper">
+            <span class="cursor-prefix">></span>
+            {{ form_widget(form.message, {
+                'attr': {
+                    'class': 'kernel-input',
+                    'maxlength': '280',
+                    'placeholder': 'Déversez votre haine...',
+                    'rows': '3'
+                }
+            }) }}
+            <div class="kernel-footer">
+                <div class="char-count-container">
+                    <div class="char-bar"></div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="deploy-btn">
+                        [ EXECUTE ]
+                    </button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </section>
+
+    <div class="dynamic-separator">
+        <div class="ticker-wrap">
+            <div class="ticker-item">
+                fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4
+            </div>
+        </div>
+    </div>
+
+    <h2>Thread</h2>
 
     {% for tweet in tweets %}
         <p>
@@ -34,14 +70,14 @@
 
     <div>
         {% for i in 1..maxPaginationPage %}
-        <a class="pagination-link {% if page == i %}active{% endif %}"
-           href="{{ path("tweets_list") }}?page={{ i }}&limit={{ limit }}">
-            {{ i }}
-        </a>
+            <a class="pagination-link {% if page == i %}active{% endif %}"
+               href="{{ path("tweets_list") }}?page={{ i }}&limit={{ limit }}">
+                {{ i }}
+            </a>
         {% endfor %}
     </div>
 
-    <h1>Tendances</h1>
+    <h2>Tendances</h2>
 
     {% for tweet in top5Tweets %}
         <p>
