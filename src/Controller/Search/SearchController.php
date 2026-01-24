@@ -30,14 +30,12 @@ final class SearchController extends AbstractController
         }
 
         $connectedUser = $this->getUser();
-
         $listTweets = $tweetsService->searchTweets($search);
 
         foreach ($listTweets as $key => $tweet) {
             $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
             $listTweets[$key]['isLikedByMe'] = ($isLiked !== null);
         }
-
 
         return $this->render('search/index.html.twig', [
             'formSearch' => $formSearch,

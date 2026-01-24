@@ -4,7 +4,9 @@
 
 {% block content %}
     <article class="single-tweet">
-        <h1>Tweet de {{ tweet.authorName }}</h1>
+        <h1>Tweet de
+            <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
+        </h1>
         <p>{{ tweet.message }}</p>
         <p>Posté {{ tweet.createdDate | ago(locale='fr') }}</p>
         <p>
@@ -16,6 +18,12 @@
             {{ isLikedByMe ? '♥' : '♡' }}
         </a>
         {{ tweet.totalLikes }}
+        <div>
+            <button id="btn-copy-link">
+                partager
+            </button>
+            <p style="display: none" id="message-copy-link">lien copié !</p>
+        </div>
         {% if app.user and tweet.authorId == app.user.id %}
         <a href="{{ path('tweets_edit', {'uid': tweet.uid}) }}">
             MODIFIER
@@ -25,4 +33,10 @@
         </a>
         {% endif %}
     </article>
+{#    <script>#}
+{#        const btnCopyLink = document.getElementById("btn-copy-link");#}
+{#        btnCopyLink.addEventListener("click", () => {#}
+{#            navigator.clipboard.writeText(window.location.href)#}
+{#        })#}
+{#    </script>#}
 {% endblock %}

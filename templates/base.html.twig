@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,14 +16,14 @@
 		<link
 		rel="stylesheet" href="{{ asset("styles/main.css") }}"/>
 
-		{# scripts main #}
-		<script src="{{ asset("scripts/main.js") }}"></script>
-
 		{% block stylesheets %}{% endblock %}
 
 		{% block javascripts %}{% endblock %}
 	</head>
 	<body>
 		{% block body %}{% endblock %}
+
+        {# scripts main #}
+        <script src="{{ asset("scripts/main.js") }}"></script>
 	</body>
 </html>

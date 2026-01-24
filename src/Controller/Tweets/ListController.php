@@ -24,14 +24,6 @@ final class ListController extends AbstractController
         #[MapQueryParameter] int $limit = 10
     ): Response
     {
-        $tweetDTO = new TweetDTO();
-
-        // création du formulaire de création d'un tweet
-        $form = $this->createForm(TweetType::class, $tweetDTO);
-
-        // traitement du formulaire par symfony, validations, etc.
-        $form->handleRequest($request);
-
         $formSearch = $this->createForm(SearchType::class);
         $formSearch->handleRequest($request);
 
@@ -40,27 +32,22 @@ final class ListController extends AbstractController
             return $this->redirectToRoute('search_tweets', ['search' => $search['rechercher']]);
         }
 
-        // si le formulaire est soumis et valide
+        $tweetDTO = new TweetDTO();
+        $form = $this->createForm(TweetType::class, $tweetDTO);
+
+        $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // récupération des données du formulaire sous forme de la DTO TweetDTO
             $tweetDTO = $form->getData();
 
-            $tweet = null;
             try {
-                // traitements métier pour créer le tweet via le service TweetsService
-                $tweet = $tweetsService->createTweet($tweetDTO, $this->getUser());
+                $tweetsService->createTweet($tweetDTO, $this->getUser());
             } catch (\Exception $e) {
-                // en cas d'erreur, ajout d'un message flash pour indiquer l'erreur
                 $this->addFlash('error', 'Erreur lors de la création du tweet');
-
-                // redirection vers la page d'accueil
                 return $this->redirectToRoute('tweets_list');
             }
 
-            // ajout d'un message flash pour indiquer le succès de l'opération
             $this->addFlash('success', 'Tweet créé avec succès !');
-
-            // redirection vers le détail du wallet nouvellement créé
             return $this->redirectToRoute('tweets_list');
         }
 
