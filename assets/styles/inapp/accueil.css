@@ -1,12 +1,35 @@
 /* assets/styles/pages/home.css */
 
+.home-main-grid {
+    display: grid !important;
+    grid-template-columns: 65% 40px 1fr !important;
+    width: 100% !important;
+    gap: 0;
+    /* Aligne tout en haut pour éviter l'étirement automatique */
+    align-items: start !important;
+}
+
+.feed-column {
+    padding: 2rem;
+    min-width: 0;
+}
+
+.sidebar-trends {
+    min-width: 0;
+    padding: 2rem;
+    position: sticky;
+    top: 0;
+}
+
 /* 1. Zone de création (L'encart) */
 .creation-zone {
+    width: 100%;
     background: #ffffff;
     padding: 35px;
     border-radius: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
 }
 
 .terminal-prompt {
@@ -92,20 +115,23 @@
 }
 
 /* 4. Le Séparateur Dynamique (Marquee CSS) */
+/* 4. Le Séparateur Dynamique (Uniformisé sur le modèle vertical) */
 .dynamic-separator {
-    width: 100%;
+    /* (100% de la colonne) + (2rem de padding gauche) + (40px pour couvrir la colonne verticale) */
+    width: calc(100% + 2rem + 40px) !important;
     height: 30px;
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.02);
     display: flex;
     align-items: center;
-    margin: 30px 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+    /* On décale à gauche pour annuler le padding et à droite pour mordre sur le voisin */
+    margin: 40px -40px 40px -2rem !important;
+
     user-select: none;
 }
 
 .ticker-wrap {
+    display: flex; /* Aligné sur .v-ticker-wrap */
     white-space: nowrap;
 }
 
@@ -114,9 +140,59 @@
     font-family: 'Courier New', monospace;
     font-size: 0.75rem;
     color: var(--primary-green);
-    opacity: 0.4;
-    padding-right: 50px;
-    animation: marquee 30s linear infinite;
+    opacity: 0.8; /* Uniformisé avec le vertical */
+    padding-right: 100px; /* Espace pour la boucle (équivalent au padding-bottom vertical) */
+
+    /* Optimisations GPU identiques au vertical */
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: marquee 60s linear infinite;
+}
+
+
+.vertical-separator {
+    width: 40px;
+    /* On retire 'stretch' pour ne pas forcer la hauteur de la cellule */
+    align-self: start !important;
+
+    /* On lie la hauteur maximale à la hauteur du voisin (feed-column) */
+    /* Cela nécessite que le parent .home-main-grid reste en align-items: start */
+    height: 100%;
+
+    position: relative;
+    overflow: hidden; /* C'est lui qui va "couper" le texte qui défile */
+    display: flex;
+    justify-content: center;
+    user-select: none;
+}
+
+.v-ticker-wrap {
+    display: flex;
+    flex-direction: column;
+    /* On s'assure que le contenu ne peut pas physiquement pousser le parent */
+    position: absolute;
+    top: 0;
+}
+
+.v-ticker-item {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--primary-green);
+    opacity: 0.8; /* Plus discret pour la sidebar */
+    padding-bottom: 100px; /* Espace pour la boucle */
+
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: marquee-vertical 60s linear infinite;
+}
+
+/* Animation verticale */
+@keyframes marquee-vertical {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
 }
 
 /* 5. Animations */
@@ -130,7 +206,7 @@
 /* Le défilement infini du séparateur */
 @keyframes marquee {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    100% { transform: translateX(-100%); }
 }
 
 /* 6. Feedback visuel sans JS (Optionnel) */
@@ -177,3 +253,204 @@
 /*------------------------------------------*/
 /*------------------------------------------*/
 /*------------------------------------------*/
+
+.terminal-title {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: var(--primary-green);
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+.tweet-card {
+    background: #ffffff;
+    border-left: 3px solid #eee; /* Bordure neutre par défaut */
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Effet de focus au survol */
+.tweet-card:hover {
+    border-left-color: var(--primary-green);
+    background: rgba(16, 185, 129, 0.02);
+    transform: translateX(5px);
+}
+
+.tweet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.author-name {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.author-name:hover { color: var(--primary-green); }
+
+.badge-suggestion {
+    font-size: 0.7rem;
+    color: var(--secondary-green);
+    margin-left: 10px;
+    font-family: 'Courier New', monospace;
+}
+
+.tweet-date {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.tweet-body {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #444;
+    margin-bottom: 1.2rem;
+}
+
+.tweet-footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 1rem;
+}
+
+.action-btn {
+    text-decoration: none;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.is-liked { color: var(--primary-green); font-weight: bold; }
+
+.detail-link {
+    text-decoration: none;
+    color: var(--secondary-green);
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Pagination */
+.pagination-container {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px; /* Force un carré parfait pour les chiffres uniques */
+    height: 40px;
+    background: #fff;
+    border: 1px solid #eee;
+    text-decoration: none;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.pagination-link:hover {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.pagination-link.active {
+    background: var(--primary-green);
+    color: #fff;
+    border-color: var(--primary-green);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+/*--------------------------------*/
+/*--------------------------------*/
+/*--------------------------------*/
+
+/* --- SECTION TENDANCES (SIDEBAR) --- */
+
+/* --- SECTION TENDANCES (SIDEBAR) --- */
+
+/* --- SECTION TENDANCES (SIDEBAR HARMONISÉE) --- */
+
+.trends-container {
+    /* Suppression de la bordure car le séparateur vertical fait déjà le job */
+    padding-left: 0.5rem;
+}
+
+/* On adapte la carte standard pour la sidebar */
+.trend-card {
+    padding: 1.2rem !important; /* Plus compact que le thread */
+    margin-bottom: 1.2rem !important;
+    border-left-width: 2px !important; /* Bordure plus fine */
+    font-size: 0.9rem;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+/* Style du rang (01, 02...) en arrière-plan */
+.trend-rank {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.03); /* Très discret */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Ajustement des éléments internes pour la sidebar */
+.trend-card .author-name {
+    font-size: 0.85rem;
+}
+
+.trend-card .tweet-date {
+    font-size: 0.7rem;
+}
+
+.trend-card .tweet-body {
+    font-size: 0.9rem !important;
+    line-height: 1.4;
+    margin-bottom: 1rem !important;
+    color: #555;
+    position: relative;
+    z-index: 1;
+}
+
+.trend-card .tweet-footer {
+    padding-top: 0.8rem !important;
+}
+
+.trend-card .action-btn,
+.trend-card .detail-link {
+    font-size: 0.75rem !important;
+}
+
+/* Status bar de fin de sidebar */
+.system-status {
+    margin-top: 2rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    color: #888;
+    text-align: center;
+}
+
+.system-status .value {
+    color: var(--primary-green);
+    font-weight: bold;
+}
+

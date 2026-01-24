@@ -1,15 +1,27 @@
-/* assets/styles/inapp.css */
+/* assets/styles/layouts/inapp.css */
+
+.in-app-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    /* On s'assure qu'aucun parent ne limite la largeur */
+}
 
 .main-content {
-    margin-left: 260px; /* Laisse la place au menu fixe */
-    flex: 1;
+    /* CRUCIAL : Cette marge crée l'espace vide pour le menu fixed */
+    margin-left: 260px !important;
+
+    flex: 1; /* Occupé tout l'espace restant à droite */
     display: flex;
     flex-direction: column;
     min-width: 0;
+    /* Supprime tout max-width ici s'il y en a un */
+    max-width: none !important;
 }
 
 .content-wrapper {
-    /* C'est ici qu'on crée l'espace pour que le header ne cache rien */
-    /* 80px (hauteur header) + 40px de marge de confort */
-    padding: 80px 2rem 2rem 2rem;
+    padding-top: 80px; /* Espace pour ton header */
+    width: 100%;
+    flex: 1;
+    display: flex;
 }

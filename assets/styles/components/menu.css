@@ -226,21 +226,6 @@
     background: rgba(239, 68, 68, 0.08) !important;
 }
 
-
-/*5. Décalage du contenu pour eviter l'écrasement de la sidebar*/
-.in-app-container {
-    display: flex;
-    background-color: #ffffff; /* Fond blanc propre */
-    min-height: 100vh;
-}
-
-.main-content {
-    margin-left: 260px; /* Largeur de ton menu side-menu */
-    flex: 1;
-    padding: 2rem 3rem;
-    max-width: 800px; /* Évite que les lignes de texte soient trop longues */
-}
-
 /*6.TROLL log system*/
 
 .terminal-loader {

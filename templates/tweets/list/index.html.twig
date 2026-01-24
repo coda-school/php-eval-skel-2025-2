@@ -9,89 +9,153 @@
 
 {% block content %}
     {# templates/home/index.html.twig #}
-
-    <section class="creation-zone">
-        <div class="terminal-prompt">
-            <span class="user">USER@{{ app.user.username }}</span>:<span class="path">~</span>$ <span class="command">write-thread</span>
-        </div>
-
-        {{ form_start(form, {'attr': {'class': 'kernel-form'}}) }}
-        <div class="input-wrapper">
-            <span class="cursor-prefix">></span>
-            {{ form_widget(form.message, {
-                'attr': {
-                    'class': 'kernel-input',
-                    'maxlength': '280',
-                    'placeholder': 'Déversez votre haine...',
-                    'rows': '3'
-                }
-            }) }}
-            <div class="kernel-footer">
-                <div class="char-count-container">
-                    <div class="char-bar"></div>
+    <div class="home-main-grid">
+        <div class="feed-column">
+            <section class="creation-zone">
+                <div class="terminal-prompt">
+                    <span class="user">USER@{{ app.user.username }}</span>:<span class="path">~</span>$ <span class="command">write-thread</span>
                 </div>
 
-                <div class="actions">
-                    <button type="submit" class="deploy-btn">
-                        [ EXECUTE ]
-                    </button>
+                {{ form_start(form, {'attr': {'class': 'kernel-form'}}) }}
+                <div class="input-wrapper">
+                    <span class="cursor-prefix">></span>
+                    {{ form_widget(form.message, {
+                        'attr': {
+                            'class': 'kernel-input',
+                            'maxlength': '280',
+                            'placeholder': 'Déversez votre haine...',
+                            'rows': '3'
+                        }
+                    }) }}
+                    <div class="kernel-footer">
+                        <div class="char-count-container">
+                            <div class="char-bar"></div>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="deploy-btn">
+                                [ EXECUTE ]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </section>
+
+            <div class="dynamic-separator">
+                <div class="ticker-wrap">
+                    <span class="ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span><span class="ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span>
                 </div>
             </div>
-        </div>
-        {{ form_end(form) }}
-    </section>
 
-    <div class="dynamic-separator">
-        <div class="ticker-wrap">
-            <div class="ticker-item">
-                fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4
+            <section class="thread-container">
+                <h2 class="terminal-title">>> SYSTEM_FEED: ACTIVE_THREADS</h2>
+
+                {% for tweet in tweets %}
+                    <article class="tweet-card">
+                        <div class="tweet-header">
+                            <div class="author-info">
+                                <span class="status-indicator"></span>
+                                <a href="{{ path('user_show', {'username': tweet.authorName}) }}" class="author-name">
+                                    {{ tweet.authorName }}
+                                </a>
+                                {% if tweet.isSuggestion %}
+                                    <span class="badge-suggestion">[SUGGESTION]</span>
+                                {% endif %}
+                            </div>
+                            <span class="tweet-date">{{ tweet.createdDate | ago(locale='fr') }}</span>
+                        </div>
+
+                        <div class="tweet-body">
+                            {{ tweet.message }}
+                        </div>
+
+                        <div class="tweet-footer">
+                            <div class="actions-left">
+                                <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}" class="action-btn like-btn {{ tweet.isLikedByMe ? 'is-liked' : '' }}">
+                                    <span class="icon">{{ tweet.isLikedByMe ? '♥' : '♡' }}</span>
+                                    <span class="count">{{ tweet.totalLikes }}</span>
+                                </a>
+                            </div>
+                            <div class="actions-right">
+                                {% if tweet.updatedDate %}
+                                    <span class="status-tag">MODIFIED</span>
+                                {% endif %}
+                                <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}" class="detail-link">
+                                    [ VIEW_DATA ]
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+
+                <nav class="pagination-container">
+                    {% for i in 1..maxPaginationPage %}
+                        <a class="pagination-link {{ page == i ? 'active' : '' }}"
+                           href="{{ path('tweets_list', {page: i, limit: limit}) }}">
+                            {{ i|format('%02d') }}
+                        </a>
+                    {% endfor %}
+                </nav>
+            </section>
+
+        </div>
+
+        <div class="vertical-separator">
+            <div class="v-ticker-wrap">
+                <span class="v-ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span><span class="v-ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span>
             </div>
         </div>
+
+        <aside class="sidebar-trends">
+            <div class="trends-container">
+                <h2 class="terminal-title">>> TOP_TRENDS_DATA</h2>
+
+                <div class="trends-list">
+                    {% for tweet in top5Tweets %}
+                        <article class="tweet-card trend-card">
+                            {# On garde le rang en filigrane pour le style #}
+                            <div class="trend-rank">{{ loop.index|format('%02d') }}</div>
+
+                            <div class="tweet-header">
+                                <div class="author-info">
+                                    <span class="status-indicator"></span>
+                                    <a href="{{ path('user_show', {'username': tweet.authorName}) }}" class="author-name">
+                                        {{ tweet.authorName }}
+                                    </a>
+                                </div>
+                                <span class="tweet-date">{{ tweet.createdDate | ago(locale='fr') }}</span>
+                            </div>
+
+                            <div class="tweet-body">
+                                {# On tronque ici car la sidebar est étroite #}
+                                {{ tweet.message|length > 80 ? tweet.message|slice(0, 80) ~ '...' : tweet.message }}
+                            </div>
+
+                            <div class="tweet-footer">
+                                <div class="actions-left">
+                                    <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}"
+                                       class="action-btn like-btn {{ tweet.isLikedByMe ? 'is-liked' : '' }}">
+                                        <span class="icon">{{ tweet.isLikedByMe ? '♥' : '♡' }}</span>
+                                        <span class="count">{{ tweet.totalLikes }}</span>
+                                    </a>
+                                </div>
+                                <div class="actions-right">
+                                    <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}" class="detail-link">
+                                        [ VIEW_DATA ]
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <div class="system-status">
+                    <span class="label">STATUS:</span> <span class="value">SYNCHRONIZED</span>
+                </div>
+            </div>
+        </aside>
     </div>
 
-    <h2>Thread</h2>
 
-    {% for tweet in tweets %}
-        <p>
-            <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
-            {{ tweet.isSuggestion ? '(suggestion)' : '' }}
-            {{ tweet.message }}
-            {{ tweet.createdDate | ago(locale='fr') }}
-            {{ tweet.updatedDate ? '(modifié)' : '' }}
-            <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
-                {{ tweet.isLikedByMe ? '♥' : '♡' }}
-            </a>
-            {{ tweet.totalLikes }}
-            <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}">
-                DETAIL
-            </a>
-        </p>
-    {% endfor %}
-
-    <div>
-        {% for i in 1..maxPaginationPage %}
-            <a class="pagination-link {% if page == i %}active{% endif %}"
-               href="{{ path("tweets_list") }}?page={{ i }}&limit={{ limit }}">
-                {{ i }}
-            </a>
-        {% endfor %}
-    </div>
-
-    <h2>Tendances</h2>
-
-    {% for tweet in top5Tweets %}
-        <p>
-            <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
-            {{ tweet.message }}
-            {{ tweet.createdDate | ago(locale='fr') }}
-            {{ tweet.updatedDate ? '(modifié)' : '' }}
-            <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
-                {{ tweet.isLikedByMe ? '♥' : '♡' }}
-            </a>
-            {{ tweet.totalLikes }}
-            <a href="{{ path('tweets_show', {'uid': tweet.uid}) }}">
-                DETAIL
-            </a>
-        </p>
-    {% endfor %}
 {% endblock %}

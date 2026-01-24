@@ -88,17 +88,26 @@ class TweetsRepository extends ServiceEntityRepository
     }
 
     public function findTop5LikeTweets(): array {
-
         $dateLimit = new \DateTime('-7 days');
 
         return $this
             ->createQueryBuilder('t')
-            ->select(self::SELECT)
+            ->select(
+                'u.username as authorName',
+                't.uid as uid',
+                't.id as id',
+                't.message as message',
+                't.createdDate as createdDate',
+                'COUNT(DISTINCT l_all.id) as totalLikes',
+                'COUNT(DISTINCT l_recent.id) as trendScore'
+            )
             ->innerJoin('t.createdBy', 'u')
-            ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false AND l.createdDate >= :dateLimit')
+            ->leftJoin(Likes::class, 'l_all', 'WITH', 't.id = l_all.tweet AND l_all.isDeleted = false')
+            ->leftJoin(Likes::class, 'l_recent', 'WITH', 't.id = l_recent.tweet AND l_recent.isDeleted = false AND l_recent.createdDate >= :dateLimit')
             ->andWhere('t.isDeleted = false')
-            ->groupBy('t.id', 'u.username', 'u.id')
-            ->orderBy('totalLikes', 'DESC')
+            ->groupBy('t.id', 'u.username')
+            ->orderBy('trendScore', 'DESC')
+            ->addOrderBy('totalLikes', 'DESC')
             ->setParameter('dateLimit', $dateLimit)
             ->setMaxResults(5)
             ->getQuery()
