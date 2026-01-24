@@ -17,6 +17,13 @@
     <a href="{{ path('follows_edit', {'name': informations.username}) }}">{{ is_followed ? "Ne plus suivre" : "Suivre" }}</a>
     {% endif %}
 
+    <div>
+        <button id="btn-copy-link">
+            partager
+        </button>
+        <p style="display: none" id="message-copy-link">lien copié !</p>
+    </div>
+
     <h1>Followed</h1>
     <p>Nombre de followed : {{ nb_followed }}</p>
     {% for user in followed %}

@@ -16,6 +16,12 @@
             {{ isLikedByMe ? '♥' : '♡' }}
         </a>
         {{ tweet.totalLikes }}
+        <div>
+            <button id="btn-copy-link">
+                partager
+            </button>
+            <p style="display: none" id="message-copy-link">lien copié !</p>
+        </div>
         {% if app.user and tweet.authorId == app.user.id %}
         <a href="{{ path('tweets_edit', {'uid': tweet.uid}) }}">
             MODIFIER
@@ -25,4 +31,10 @@
         </a>
         {% endif %}
     </article>
+{#    <script>#}
+{#        const btnCopyLink = document.getElementById("btn-copy-link");#}
+{#        btnCopyLink.addEventListener("click", () => {#}
+{#            navigator.clipboard.writeText(window.location.href)#}
+{#        })#}
+{#    </script>#}
 {% endblock %}
