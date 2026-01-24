@@ -39,17 +39,15 @@ final class EditController extends AbstractController
         }
 
         $dtoUser = UserDTO::fromEntity($user);
-
         $form = $this->createForm(UserType::class, $dtoUser);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dtoUser = $form->getData();
             try {
-                $user = $userService->updateUser($user, $dtoUser);
+                $userService->updateUser($user, $dtoUser);
                 return $this->redirectToRoute('user_show', ['username' => $connectedUser->getUsername()]);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $this->addFlash("danger", "erreur lors de la modification du profil");
                 return $this->redirectToRoute('user_show', ['username' => $connectedUser->getUsername()]);
             }

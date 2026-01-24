@@ -41,18 +41,19 @@ final class EditController extends AbstractController
         $dto = TweetDTO::fromEntity($tweets);
         $form =$this->createForm(TweetType::class, $dto);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $dto = $form->getData();
 
             try {
                 $tweets = $tweetsService->updateTweet($tweets, $dto, $connectedUser);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $this->addFlash('danger', 'Erreur lors de la modification du tweet');
 
                 return $this->redirectToRoute('tweets_edit', ['uid' => $tweets->getUid()]);
             }
 
-            $this->addFlash('success', 'Success modification du tweet!');
+            $this->addFlash('success', 'Votre tweet a bien été modifié!');
 
             return $this->redirectToRoute('tweets_show', ['uid' => $tweets->getUid()]);
         }

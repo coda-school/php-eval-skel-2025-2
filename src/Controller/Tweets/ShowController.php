@@ -33,7 +33,6 @@ final class ShowController extends AbstractController
         }
 
         $connectedUser = $this->getUser();
-
         $tweetData = $tweetsService->getTweetByUid($tweet->getUid());
 
         $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweetData['id']);

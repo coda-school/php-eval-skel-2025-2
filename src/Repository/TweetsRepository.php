@@ -125,7 +125,7 @@ class TweetsRepository extends ServiceEntityRepository
             ->select(self::SELECT)
             ->innerJoin('t.createdBy', 'u')
             ->leftJoin(Likes::class, 'l', 'WITH', 't.id = l.tweet AND l.isDeleted = false')
-            ->andWhere('t.message LIKE :search')
+            ->andWhere('LOWER(t.message) LIKE LOWER(:search)')
             ->andWhere('t.isDeleted = false')
             ->groupBy('t.id', 'u.username', 'u.id')
             ->setParameter('search', '%' . $search . '%')
