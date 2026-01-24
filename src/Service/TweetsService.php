@@ -8,12 +8,17 @@ use App\Entity\User;
 use App\Repository\TweetsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TweetsService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly TweetsRepository $tweetsRepository,
+        private string $targetDirectory,
+        private SluggerInterface $slugger,
     )
     {
     }
@@ -23,6 +28,7 @@ class TweetsService
 
         $tweet->setUid(Uuid::v7()->toString());
         $tweet->setMessage($tweetDTO->message);
+        $tweet->setImage($tweetDTO->image);
         $tweet->setCreatedBy($user);
         $tweet->setCreatedDate(new \DateTime());
 
@@ -34,6 +40,7 @@ class TweetsService
 
     public function updateTweet(Tweets $tweets, TweetDTO $dto, User $updater): Tweets {
         $tweets->setMessage($dto->message);
+        $tweets->setImage($dto->image);
         $tweets->setUpdatedBy($updater);
         $tweets->setUpdatedDate(new \DateTime());
         $this->em->persist($tweets);
@@ -97,6 +104,26 @@ class TweetsService
 
     public function getTweetByUid(string $tweetUid): array {
         return $this->tweetsRepository->getTweetByUid($tweetUid);
+    }
+
+    public function upload(UploadedFile $file): string
+    {
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $this->slugger->slug($originalFilename);
+        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+        try {
+            $file->move($this->getTargetDirectory(), $fileName);
+        } catch (FileException) {
+
+        }
+
+        return $fileName;
+    }
+
+    public function getTargetDirectory(): string
+    {
+        return $this->targetDirectory;
     }
 
 }

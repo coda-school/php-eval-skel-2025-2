@@ -64,4 +64,5 @@ class Tweets extends BaseEntity
 
         return $this;
     }
+
 }

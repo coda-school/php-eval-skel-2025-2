@@ -10,3 +10,14 @@ if (btnCopyLink) {
         }, 1000);
     })
 }
+
+function updateFileName(input) {
+    const display = document.getElementById('file-name-display');
+
+    if (input.files && input.files.length > 0) {
+        const fileName = input.files[0].name;
+        display.textContent = fileName;
+    } else {
+        display.textContent = "Aucun fichier choisi";
+    }
+}

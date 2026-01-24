@@ -21,9 +21,7 @@ class SearchType extends AbstractType
                         message: 'Vous devez entrer une recherche.'
                     ),
                     new Length(
-                        min: 1,
                         max: 50,
-                        minMessage : "Votre recherche doit contenir au minimum 1 caractère.",
                         maxMessage: "Votre recherche ne peut pas dépasser 50 caractères.",
                     )
                 ],
