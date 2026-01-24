@@ -11,6 +11,8 @@ class TweetDTO
     public string $message;
     public ?string $image = null;
 
+    public bool $removeImage = false;
+
     public static function fromEntity(Tweets $tweets): TweetDTO
     {
         $dto = new self();

@@ -1,5 +1,10 @@
 {% extends '_layouts/in_app.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/inapp/edit-tweet.css') }}">
+{% endblock %}
+
 {% block title %}Hello Tweets/DeleteController!{% endblock %}
 
 {% block content %}
@@ -11,11 +16,39 @@
         {{ form_errors(form.message) }}
     </div>
 
+    {% if tweets.image %}
+        <div class="current-image mb-3">
+            <p>Image actuelle :</p>
+            <img src="{{ asset('uploads/tweets/' ~ tweets.image) }}" alt="img du tweet" width="150" class="img-thumbnail">
+            <div class="form-check text-danger">
+                {{ form_widget(form.removeImage) }}
+                {{ form_label(form.removeImage) }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="image-upload-wrapper">
+        <label for="{{ form.image.vars.id }}" class="deploy-btn">
+            Ajouter/Modifier l'image
+        </label>
+
+        {{ form_widget(form.image, {
+            'attr': {
+                'class': 'input-file-hidden',
+                'onchange': 'updateFileName(this)'
+            }
+        }) }}
+
+        <span id="file-name-display">
+                    Aucun fichier choisi
+                </span>
+        <span id="file-chosen-error">{{ form_errors(form.image) }}</span>
+    </div>
+
     <div class="actions" style="margin-top: 20px;">
         <button type="submit">Enregistrer les modifications</button>
         <a href="{{ path('tweets_show', {'uid': tweets.uid}) }}" class="btn btn-secondary">Annuler</a>
     </div>
 
-    {# On ferme le formulaire #}
-    {{ form_end(form) }}
+    {{ form_end(form, {render_rest: false}) }}
 {% endblock %}

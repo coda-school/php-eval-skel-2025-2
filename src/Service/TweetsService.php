@@ -40,6 +40,7 @@ class TweetsService
 
     public function updateTweet(Tweets $tweets, TweetDTO $dto, User $updater): Tweets {
         $tweets->setMessage($dto->message);
+        $tweets->setImage($dto->image);
         $tweets->setUpdatedBy($updater);
         $tweets->setUpdatedDate(new \DateTime());
         $this->em->persist($tweets);

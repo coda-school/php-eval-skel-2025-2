@@ -43,19 +43,25 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $dto = $form->getData();
+            $imgFile = $form->get('image')->getData();
+
+            if ($imgFile) {
+                $imgFileName = $tweetsService->upload($imgFile);
+                $dto->image = $imgFileName;
+            } elseif ($dto->removeImage) {
+                $dto->image = null;
+            } else {
+                $dto->image = $tweets->getImage();
+            }
 
             try {
                 $tweets = $tweetsService->updateTweet($tweets, $dto, $connectedUser);
+                $this->addFlash('success', 'Votre tweet a bien été modifié!');
+                return $this->redirectToRoute('tweets_show', ['uid' => $tweets->getUid()]);
             } catch (\Exception) {
                 $this->addFlash('danger', 'Erreur lors de la modification du tweet');
-
                 return $this->redirectToRoute('tweets_edit', ['uid' => $tweets->getUid()]);
             }
-
-            $this->addFlash('success', 'Votre tweet a bien été modifié!');
-
-            return $this->redirectToRoute('tweets_show', ['uid' => $tweets->getUid()]);
         }
 
         return $this->render('tweets/edit/index.html.twig', [

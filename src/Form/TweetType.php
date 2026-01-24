@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\DTO\TweetDTO;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,6 +45,10 @@ class TweetType extends AbstractType
                         extensionsMessage: "Merci d'ajouter une image au format png, jpg, jpeg ou gif",
                     )
                 ]
+            ])
+            ->add('removeImage', CheckboxType::class, [
+                'label' => "Supprimer l'image",
+                'required' => false,
             ])
         ;
     }
