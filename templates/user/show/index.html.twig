@@ -45,6 +45,13 @@
         <p>
             <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
             {{ tweet.message }}
+            {% if tweet.image %}
+                <div class="tweet-image">
+                    <img src="{{ asset('uploads/tweets/' ~ tweet.image) }}"
+                         alt="Img du tweet"
+                         style="max-width: 300px;">
+                </div>
+            {% endif %}
             {{ tweet.createdDate | ago(locale='fr') }}
             {{ tweet.updatedDate ? '(modifié)' : '' }}
             <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">{{ tweet.isLikedByMe ? '♥' : '♡' }}</a>

@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\DTO\TweetDTO;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class TweetType extends AbstractType
 {
@@ -30,7 +32,19 @@ class TweetType extends AbstractType
                 "required" => true,
                 "help" => "Votre message doit être compris entre 1 et 280 caractères",
             ])
-
+            ->add('image', FileType::class, [
+                'attr' => ['title' => 'Choisir une image',
+                    'placeholder' => ''],
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Assert\File(
+                        maxSize: '1024k',
+                        extensions: ['png', 'jpg', 'jpeg', 'gif'],
+                        extensionsMessage: "Merci d'ajouter une image au format png, jpg, jpeg ou gif",
+                    )
+                ]
+            ])
         ;
     }
 

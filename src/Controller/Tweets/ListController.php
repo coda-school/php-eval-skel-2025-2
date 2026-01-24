@@ -38,17 +38,24 @@ final class ListController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tweetDTO = $form->getData();
+            $imgFile = $form->get('image')->getData();
 
             try {
+
+
+                if ($imgFile) {
+                    $imgFileName = $tweetsService->upload($imgFile);
+                    $tweetDTO->image = $imgFileName;
+                }
+
                 $tweetsService->createTweet($tweetDTO, $this->getUser());
-            } catch (\Exception $e) {
+                $this->addFlash('success', 'Tweet créé avec succès !');
+                return $this->redirectToRoute('tweets_list');
+
+            } catch (\Exception) {
                 $this->addFlash('error', 'Erreur lors de la création du tweet');
                 return $this->redirectToRoute('tweets_list');
             }
-
-            $this->addFlash('success', 'Tweet créé avec succès !');
-            return $this->redirectToRoute('tweets_list');
         }
 
         $connectedUser = $this->getUser();

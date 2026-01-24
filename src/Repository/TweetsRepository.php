@@ -23,6 +23,7 @@ class TweetsRepository extends ServiceEntityRepository
                              't.uid as uid',
                              't.id as id',
                              't.message as message',
+                             't.image as image',
                              't.createdDate as createdDate',
                              't.updatedDate as updatedDate',
                              'COUNT(l.id) as totalLikes'];

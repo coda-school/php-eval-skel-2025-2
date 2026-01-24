@@ -26,6 +26,24 @@
                     'rows': '3'
                 }
             }) }}
+            <div class="image-upload-wrapper">
+                <label for="{{ form.image.vars.id }}" class="deploy-btn">
+                    Ajouter une image
+                </label>
+
+                {{ form_widget(form.image, {
+                    'attr': {
+                        'class': 'input-file-hidden',
+                        'onchange': 'updateFileName(this)'
+                    }
+                }) }}
+
+                <span id="file-name-display">
+                    Aucun fichier choisi
+                </span>
+                <span id="file-chosen-error">{{ form_errors(form.image) }}</span>
+
+            </div>
             <div class="kernel-footer">
                 <div class="char-count-container">
                     <div class="char-bar"></div>
