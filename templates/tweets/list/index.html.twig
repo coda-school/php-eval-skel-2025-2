@@ -13,7 +13,8 @@
         <div class="feed-column">
             <section class="creation-zone">
                 <div class="terminal-prompt">
-                    <span class="user">USER@{{ app.user.username }}</span>:<span class="path">~</span>$ <span class="command">write-thread</span>
+                    <span class="user">USER@{{ app.user.username }}</span>:<span class="path">~</span>$ <span
+                        class="command">write-thread</span>
                 </div>
 
                 {{ form_start(form, {'attr': {'class': 'kernel-form'}}) }}
@@ -27,11 +28,9 @@
                             'rows': '3'
                         }
                     }) }}
-
-                    {# Zone Upload Image intégrée #}
                     <div class="image-upload-wrapper">
                         <label for="{{ form.image.vars.id }}" class="deploy-btn">
-                            [ ATTACH_IMAGE ]
+                            Ajouter une image
                         </label>
                         {{ form_widget(form.image, {
                             'attr': {
@@ -40,13 +39,14 @@
                             }
                         }) }}
                         <span id="file-name-display">Aucun fichier choisi</span>
-                        <div class="error-msg">{{ form_errors(form.image) }}</div>
+                        <span id="file-chosen-error">{{ form_errors(form.image) }}</span>
                     </div>
 
                     <div class="kernel-footer">
                         <div class="char-count-container">
                             <div class="char-bar"></div>
                         </div>
+
                         <div class="actions">
                             <button type="submit" class="deploy-btn">
                                 [ EXECUTE ]
@@ -59,7 +59,8 @@
 
             <div class="dynamic-separator">
                 <div class="ticker-wrap">
-                    <span class="ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span><span class="ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span>
+                    <span class="ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span><span
+                        class="ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span>
                 </div>
             </div>
 
@@ -83,11 +84,21 @@
 
                         <div class="tweet-body">
                             {{ tweet.message }}
+
+                            {% if tweet.image %}
+                                <div class="tweet-image-wrapper">
+                                    <img src="{{ asset('uploads/tweets/' ~ tweet.image) }}"
+                                         alt="DATA_ATTACHMENT_{{ tweet.uid }}"
+                                         class="tweet-content-image">
+                                    <div class="image-overlay-scan"></div>
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="tweet-footer">
                             <div class="actions-left">
-                                <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}" class="action-btn like-btn {{ tweet.isLikedByMe ? 'is-liked' : '' }}">
+                                <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}"
+                                   class="action-btn like-btn {{ tweet.isLikedByMe ? 'is-liked' : '' }}">
                                     <span class="icon">{{ tweet.isLikedByMe ? '♥' : '♡' }}</span>
                                     <span class="count">{{ tweet.totalLikes }}</span>
                                 </a>
@@ -100,13 +111,6 @@
                                     [ VIEW_DATA ]
                                 </a>
                             </div>
-                            {% if tweet.image %}
-                                <div class="tweet-image">
-                                    <img src="{{ asset('uploads/tweets/' ~ tweet.image) }}"
-                                         alt="Img du tweet"
-                                         style="max-width: 300px;">
-                                </div>
-                            {% endif %}
                         </div>
                     </article>
                 {% endfor %}
@@ -125,7 +129,8 @@
 
         <div class="vertical-separator">
             <div class="v-ticker-wrap">
-                <span class="v-ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span><span class="v-ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span>
+                <span class="v-ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span><span
+                    class="v-ticker-item">fdg65fd4h65g1fd651g1fd61g1fd1g5f1dg1::0x000000::ERR_DATA_STRM_X99::kfd4564fd654gf65d4g6f54d6g54f65d4g65f4d6g5f465::SEGFAULT::df654gdf65g4fd65g4fd65g4fd65g4fd65g4fd65g::NULL_PTR::f465d4f65d4f654df654df654d65f4d65f4::[REDACTED]::54fd654f6d54f654df6d54f654df654df654df654d::SYSTEM_HALT::4564f65d4f65d4f65d4f65d4f65d4f65d4f65d4f65d4</span>
             </div>
         </div>
 
@@ -142,7 +147,8 @@
                             <div class="tweet-header">
                                 <div class="author-info">
                                     <span class="status-indicator"></span>
-                                    <a href="{{ path('user_show', {'username': tweet.authorName}) }}" class="author-name">
+                                    <a href="{{ path('user_show', {'username': tweet.authorName}) }}"
+                                       class="author-name">
                                         {{ tweet.authorName }}
                                     </a>
                                 </div>

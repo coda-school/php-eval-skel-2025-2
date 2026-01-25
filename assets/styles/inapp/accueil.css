@@ -471,3 +471,35 @@
     color: var(--primary-green);
 }
 
+/* --- AFFICHAGE IMAGE TWEET --- */
+
+.tweet-image-wrapper {
+    margin-top: 1rem;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    /* Empêche l'image de dépasser la largeur du tweet */
+    max-width: 100%;
+    /* Garde le footer bien à sa place en dessous */
+    display: block;
+}
+
+.tweet-content-image {
+    display: block;
+    max-width: 100%;
+    /* Limite la hauteur pour garder un flux de lecture confortable */
+    max-height: 450px;
+    height: auto;
+    object-fit: cover; /* Remplit proprement l'espace sans déformer */
+    border: 1px solid #eee; /* Rappel de la bordure du tweet */
+}
+
+/* Optionnel : l'effet de scan très léger sans animation */
+.image-overlay-scan {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+}
+
