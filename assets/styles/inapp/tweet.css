@@ -1,0 +1,445 @@
+/* --- LAYOUT GLOBAL (GRID 3 COLONNES) --- */
+.profile-grid-wrapper {
+    display: grid;
+    /* 1fr (données) | 900px max (Tweet) | 1fr (données) */
+    grid-template-columns: 1fr minmax(auto, 900px) 1fr;
+    width: 100%;
+    min-height: 100vh;
+    align-items: start;
+    background: #ffffff;
+}
+
+/* --- ZONE CENTRALE (CARTE TWEET) --- */
+.profile-container {
+    grid-column: 2;
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- SÉPARATEURS DE DATA (LES 5 BANDES) --- */
+.vertical-separator {
+    width: 100%;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+    user-select: none;
+    pointer-events: none;
+}
+
+.side-left { grid-column: 1; }
+.side-right { grid-column: 3; }
+
+.v-ticker-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.v-ticker-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style des données qui défilent */
+.v-ticker-item {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: #10b981; /* Ton vert fétiche */
+    opacity: 0.8;  /* Très discret pour ne pas gêner la lecture du tweet */
+    padding-bottom: 50px;
+    white-space: nowrap;
+    animation: marquee-vertical 20s linear infinite;
+}
+
+/* Désynchronisation pour le réalisme */
+.v-ticker-column:nth-child(2n) .v-ticker-item { animation-duration: 25s; opacity: 0.8; }
+.v-ticker-column:nth-child(3n) .v-ticker-item { animation-duration: 18s; opacity: 0.8; }
+
+.side-right .v-ticker-item {
+    animation-direction: reverse;
+}
+
+/* --- ANIMATION --- */
+@keyframes marquee-vertical {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* Fondu haut/bas pour intégrer les data proprement */
+.vertical-separator::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        #ffffff 0%,
+        transparent 15%,
+        transparent 85%,
+        #ffffff 100%
+    );
+}
+
+
+/*-----------------------------------*/
+/*-----------------------------------*/
+/*-----------------------------------*/
+
+/* --- 1. LA CARTE TWEET (STRUCTURE) --- */
+.tweet-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-left: 5px solid #10b981;
+    padding: 2.5rem;
+    position: relative;
+    background-image: radial-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 0);
+    background-size: 20px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+/* --- 2. HEADER (SOURCE & TIMESTAMP) --- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 1.5rem;
+}
+
+.terminal-title {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    color: #444;
+    margin: 0;
+}
+
+.terminal-title .highlight {
+    color: #10b981;
+    text-decoration: none;
+    font-weight: bold;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+}
+
+.timestamp-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.time-detail {
+    color: #10b981;
+    margin-left: 4px;
+}
+
+/* --- 3. CONTENU DU MESSAGE --- */
+.main-message {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+    word-wrap: break-word;
+}
+
+/* Image du Tweet */
+/* --- AJUSTEMENT TAILLE IMAGE (CADRAGE SYSTÈME) --- */
+.tweet-image-container {
+    position: relative;
+    /* On centre l'image horizontalement et on met de l'espace vertical */
+    margin: 2rem auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    /* Limites de sécurité pour ne pas casser l'affichage */
+    max-width: 85%;    /* Ne colle pas aux bords de la carte */
+    max-height: 500px; /* Évite de scroller à l'infini sur une image verticale */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.02); /* Fond léger pour les images transparentes */
+}
+
+.tweet-image-container img {
+    /* L'image s'adapte à l'espace imparti sans déformer ses proportions */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+/* Petit effet de scanline sur l'image */
+.image-overlay-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+/* --- 4. METADATA --- */
+.tweet-metadata {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.meta-row {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.meta-row .label {
+    color: #10b981;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* --- 5. ACTIONS & INTERACTIONS --- */
+.tweet-actions-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+}
+
+.interaction-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.like-btn {
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    color: #666;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.like-btn.is-liked { color: #10b981; }
+.like-btn:hover { color: #10b981; transform: scale(1.05); }
+
+.action-btn-mini {
+    background: none;
+    border: 1px solid #ddd;
+    color: #888;
+    padding: 5px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn-mini:hover {
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.status-msg {
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: #10b981;
+    animation: blink 1s infinite;
+}
+
+/* --- ADMIN ACTIONS (STYLE SOLID TERMINAL) --- */
+.admin-group {
+    display: flex;
+    gap: 12px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Base commune pour les boutons */
+.edit-link, .delete-link {
+    text-decoration: none;
+    padding: 6px 14px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
+/* --- BOUTON MODIFIER (VERT) --- */
+.edit-link {
+    color: #10b981;
+    border: 1px solid #10b981;
+    background: transparent;
+}
+
+.edit-link:hover {
+    color: #ffffff;
+    background: #10b981;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px);
+}
+
+/* --- BOUTON SUPPRIMER (ROUGE) --- */
+.delete-link {
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    background: transparent;
+}
+
+.delete-link:hover {
+    color: #ffffff;
+    background: #ef4444;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    transform: translateY(-1px);
+}
+
+/* On sature le séparateur pour ne pas polluer le layout */
+.admin-group .separator {
+    display: none;
+}
+
+/* On garde le blink pour les feedbacks système ailleurs */
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+
+/*-----------------------*/
+/*-----------------------*/
+/*-----------------------*/
+
+/* --- TERMINAL DE TOXICITÉ (VERSION FINALE - VERTICAL FIX) --- */
+.toxicity-terminal {
+    margin-top: 3rem;
+    padding: 25px;
+    /* Gris doux système pour une intégration fluide */
+    background: #f1f3f5;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    position: relative;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    color: #888;
+    font-size: 0.7rem;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 12px;
+}
+
+/* --- ZONE DES JAUGES --- */
+.jauges-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 240px;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.jauge-bar {
+    width: 24px; /* Largeur optimisée pour le texte vertical */
+    height: 100%;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- MOTS EN COLONNE (FORCE L'ORIENTATION DROITE) --- */
+.jauge-word {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Centrage Flexbox */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* Blocage du format vertical sans rotation des lettres */
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    font-size: 0.75rem;
+    line-height: 1.1;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+
+    z-index: 10;
+    pointer-events: none;
+
+    /* Couleur de base et mode de fusion pour la révélation rouge */
+    color: #ff3333;
+    mix-blend-mode: difference;
+}
+
+.jauge-fill {
+    width: 100%;
+    background: #10b981;
+    position: absolute;
+    bottom: 0;
+    z-index: 5;
+    animation: jauge-rise 3.5s ease-in-out infinite alternate;
+}
+
+/* --- ANIMATIONS DES JAUGES --- */
+@keyframes jauge-rise {
+    0% { height: 10%; }
+    100% { height: 85%; }
+}
+
+.jauge-bar:nth-child(even) .jauge-fill { animation-duration: 2.5s; }
+.jauge-bar:nth-child(3n) .jauge-fill { animation-duration: 4s; }
+
+/* --- FOOTER & ALERTE CLIGNOTANTE --- */
+.terminal-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 15px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.warning-msg {
+    color: #ef4444;
+    font-weight: bold;
+    letter-spacing: 1px;
+    animation: blink-red 0.8s step-end infinite;
+}
+
+@keyframes blink-red {
+    50% { opacity: 0; }
+}
+
+/* Balayage scanner discret */
+.toxicity-wave {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+    background-size: 100% 200%;
+    animation: scan-vertical 5s linear infinite;
+    z-index: 1;
+}
+
+@keyframes scan-vertical {
+    0% { background-position: 0 100%; }
+    100% { background-position: 0 -100%; }
+}

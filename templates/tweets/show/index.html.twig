@@ -1,45 +1,156 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Hello Tweets/ShowController!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/inapp/tweet.css') }}">
+{% endblock %}
+
+{% block title %}SYS_VIEW :: TWEET_ID_{{ tweet.uid|slice(0, 8) }}{% endblock %}
 
 {% block content %}
-    <article class="single-tweet">
-        <h1>Tweet de
-            <a href="{{ path('user_show', {'username': tweet.authorName}) }}">{{ tweet.authorName }}</a>
-        </h1>
-        <p>{{ tweet.message }}</p>
-        <p>Posté {{ tweet.createdDate | ago(locale='fr') }}</p>
-        <p>
-            {% if tweet.updatedDate %}
-            Modifié {{ tweet.updatedDate | ago(locale='fr') }}
-            {% endif %}
-        </p>
-        {% if tweet.image %}
-            <div class="tweet-image">
-                <img src="{{ asset('uploads/tweets/' ~ tweet.image) }}"
-                     alt="Img du tweet"
-                     style="max-width: 300px;">
+    <div class="profile-grid-wrapper">
+
+        {# --- SÉPARATEUR GAUCHE (5 BANDES) --- #}
+        <aside class="vertical-separator side-left">
+            <div class="v-ticker-wrap">
+                {% for col in 1..5 %}
+                    <div class="v-ticker-column">
+                        {% for i in 1..3 %}
+                            <span class="v-ticker-item">
+                            {% set noise = "0123456789ABCDEF" %}
+                            RAW_DATA_STREAM_{{ random(100,999) }}::
+                            {% for j in 1..15 %}{{ noise|slice(random(15), 1) }}{% endfor %}
+                            ::READ_ONLY::
+                        </span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
             </div>
-        {% endif %}
-        <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}">
-            {{ isLikedByMe ? '♥' : '♡' }}
-        </a>
-        {{ tweet.totalLikes }}
-        <div>
-            <button id="btn-copy-link">
-                partager
-            </button>
-            <p style="display: none" id="message-copy-link">lien copié !</p>
+        </aside>
+
+        {# --- CONTENU CENTRAL (LA CARTE TWEET) --- #}
+        <div class="profile-container">
+            <section class="tweet-focus-header">
+                <article class="terminal-card tweet-card">
+
+                    <div class="card-header">
+                        <div class="header-main">
+                            <span class="status-indicator active"></span>
+                            <h1 class="terminal-title">
+                                >> SOURCE_ORIGIN:
+                                <a href="{{ path('user_show', {'username': tweet.authorName}) }}" class="highlight">
+                                    @{{ tweet.authorName }}
+                                </a>
+                            </h1>
+                        </div>
+                        <div class="header-actions">
+                            <span class="timestamp-tag">
+                                EXP_DATE: {{ tweet.createdDate | date('d/m/Y') }}
+                                <span class="time-detail">[{{ tweet.createdDate | date('H:i:s') }}]</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="tweet-content">
+                        <p class="main-message">{{ tweet.message }}</p>
+
+                        {% if tweet.image %}
+                            <div class="tweet-image-container">
+                                <img src="{{ asset('uploads/tweets/' ~ tweet.image) }}" alt="Data Visual">
+                                <div class="image-overlay-grid"></div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="tweet-metadata">
+                        <div class="meta-row">
+                            <span class="label">DATE_STAMP:</span>
+                            <span class="value">{{ tweet.createdDate | ago(locale='fr') }}</span>
+                        </div>
+                        {% if tweet.updatedDate %}
+                            <div class="meta-row italic">
+                                <span class="label">LAST_MOD:</span>
+                                <span class="value">{{ tweet.updatedDate | ago(locale='fr') }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="tweet-actions-footer">
+                        <div class="interaction-group">
+                            <a href="{{ path('likes_edit', {'tweet_uid': tweet.uid}) }}" class="like-btn {{ isLikedByMe ? 'is-liked' : '' }}">
+                                {{ isLikedByMe ? '♥' : '♡' }}
+                                <span class="count">{{ tweet.totalLikes }}</span>
+                            </a>
+
+                            <button id="btn-copy-link" class="action-btn-mini">
+                                [ SHARE_LINK ]
+                            </button>
+                            <span style="display: none" id="message-copy-link" class="status-msg">:: LIEN_COPIE</span>
+                        </div>
+
+                        {% if app.user and tweet.authorId == app.user.id %}
+                            <div class="admin-group">
+                                <a href="{{ path('tweets_edit', {'uid': tweet.uid}) }}" class="edit-link">EDIT_TOXICITY</a>
+                                <span class="separator">|</span>
+                                <a href="{{ path('tweets_delete', {'uid': tweet.uid}) }}" class="delete-link">DELETE</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </article>
+            </section>
+
+            <section class="toxicity-terminal">
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <span class="pulse-icon"></span>
+                        <span class="terminal-title">ANALYSE_TOXICITE_V3</span>
+                        <span class="terminal-status">[SCANNING...]</span>
+                    </div>
+
+                    <div class="graph-container">
+                        <div class="jauges-wrapper">
+                            {# Définition des vecteurs de toxicité #}
+                            {% set toxicity_words = ['HAINE', 'DEGOUT', 'RAGE', 'PEUR', 'BIAS', 'MENSONGE', 'DOUTE', 'CHAGRIN', 'COLERE', 'VENIN', 'MEPRIS', 'CYNISME'] %}
+
+                            {% for word in toxicity_words %}
+                                <div class="jauge-bar">
+                                    {# Le mot qui sera "éclairé" par la jauge #}
+                                    <span class="jauge-word">{{ word }}</span>
+                                    {# La jauge qui monte et descend #}
+                                    <div class="jauge-fill"></div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="toxicity-wave"></div>
+                    </div>
+
+                    <div class="terminal-footer">
+                        <p class="status-text">ÉTAT : <span class="warning-msg">TOXICITÉ ENCLENCHÉE</span></p>
+                    </div>
+                </div>
+            </section>
+
+            {# On pourrait même imaginer une zone de "Commentaires" en dessous plus tard #}
         </div>
-        {% if app.user and tweet.authorId == app.user.id %}
-        <a href="{{ path('tweets_edit', {'uid': tweet.uid}) }}">
-            MODIFIER
-        </a>
-        <a href="{{ path('tweets_delete', {'uid': tweet.uid}) }}">
-            SUPPRIMER
-        </a>
-        {% endif %}
-    </article>
+
+        {# --- SÉPARATEUR DROIT (5 BANDES) --- #}
+        <aside class="vertical-separator side-right">
+            <div class="v-ticker-wrap">
+                {% for col in 1..5 %}
+                    <div class="v-ticker-column">
+                        {% for i in 1..3 %}
+                            <span class="v-ticker-item">
+                            ::MONITORING_PACKET::
+                            0x{{ random(10000, 99999) }}
+                            ::DECRYPTING_CONTENT::
+                        </span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </aside>
+    </div>
 {#    <script>#}
 {#        const btnCopyLink = document.getElementById("btn-copy-link");#}
 {#        btnCopyLink.addEventListener("click", () => {#}
