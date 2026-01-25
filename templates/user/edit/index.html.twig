@@ -1,17 +1,116 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Hello User/EditController!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/inapp/edit-profile.css') }}">
+    {# On pourra créer un edit.css plus tard si besoin de réglages spécifiques au formulaire #}
+{% endblock %}
+
+{% block title %}SYS_ADMIN :: EDIT_MODE{% endblock %}
 
 {% block content %}
+    <div class="profile-grid-wrapper">
 
-    <h1>Modifier le profil</h1>
+        {# --- SÉPARATEUR GAUCHE (5 BANDES) --- #}
+        <aside class="vertical-separator side-left">
+            <div class="v-ticker-wrap">
+                {% for col in 1..5 %}
+                    <div class="v-ticker-column">
+                        {% for i in 1..3 %}
+                            <span class="v-ticker-item">
+                            {% set noise = "0123456789ABCDEF" %}
+                            MOD_SEQ_{{ random(100,999) }}::
+                            {% for j in 1..15 %}{{ noise|slice(random(15), 1) }}{% endfor %}
+                            ::OVERWRITE_AUTH::
+                        </span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </aside>
 
-    <div>
-        {{ form_start(form) }}
-        <button type="submit">Enregistrer</button>
-        {{ form_end(form) }}
+        {# --- CONTENU CENTRAL (FORMULAIRE) --- #}
+        <div class="profile-container">
+            <section class="user-profile-header">
+                <div class="terminal-card profile-card">
+
+                    <div class="card-header">
+                        <div class="header-main">
+                            <span class="status-indicator active" style="background: orange;"></span>
+                            <h1 class="terminal-title">>> EDIT_USER: <span class="highlight">{{ app.user.username }}</span></h1>
+                        </div>
+                        <div class="header-actions">
+                            <a href="{{ path('user_show', {'username': app.user.username}) }}" class="action-btn-mini">[ ABORT_CHANGES ]</a>
+                        </div>
+                    </div>
+
+                    <div class="profile-content">
+                        {{ form_start(form, {'attr': {'class': 'terminal-form'}}) }}
+
+                        <div class="form-body">
+                            {# On affichera les champs ici avec un style "input de terminal" #}
+                            {{ form_widget(form) }}
+                        </div>
+
+                        <div class="profile-footer-actions" style="margin-top: 2rem;">
+                            <button type="submit" class="deploy-btn">COMMIT_CHANGES</button>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+
+                </div>
+            </section>
+            <div class="deployment-terminal">
+                <div class="terminal-header">
+                    <span class="terminal-tab">STAGING_AREA</span>
+                </div>
+                <div class="terminal-window">
+                    {# Ligne 1 #}
+                    <div class="log-row delay-1">
+                        <span class="log-prefix">>></span> INITIALISATION_DU_DENI... [OK]
+                        <div class="progress-bar"><div class="progress-fill fill-90"></div></div>
+                    </div>
+                    {# Ligne 2 #}
+                    <div class="log-row delay-2">
+                        <span class="log-prefix">>></span> INJECTION_DU_MANQUE_DE_CONFIANCE_EN_SOI... [OK]
+                        <div class="progress-bar"><div class="progress-fill fill-60"></div></div>
+                    </div>
+                    {# Ligne 3 #}
+                    <div class="log-row delay-3">
+                        <span class="log-prefix">>></span> CALIBRATION_DU_NOYAU_CYNIQUE... [OK]
+                        <div class="progress-bar"><div class="progress-fill fill-100"></div></div>
+                    </div>
+                    {# Ligne 4 #}
+                    <div class="log-row delay-4">
+                        <span class="log-prefix">>></span> PURGE_DU_SYSTÈME_MORAL... [OK]
+                        <div class="progress-bar"><div class="progress-fill fill-40"></div></div>
+                    </div>
+
+                    {# Message Final #}
+                    <div class="final-msg delay-5">
+                        <span class="blink-fast">!!!</span> NOUVELLE IDENTITÉ PRÊTE À DÉTRUIRE <span class="blink-fast">!!!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# --- SÉPARATEUR DROIT (5 BANDES) --- #}
+        <aside class="vertical-separator side-right">
+            <div class="v-ticker-wrap">
+                {% for col in 1..5 %}
+                    <div class="v-ticker-column">
+                        {% for i in 1..3 %}
+                            <span class="v-ticker-item">
+                            ::WAITING_FOR_INPUT::
+                            0x{{ random(10000, 99999) }}
+                            ::ENCRYPTING_BUFFER::
+                        </span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </aside>
+
     </div>
-
-    <a href="{{ path('user_show', {'username': app.user.username}) }}">Retour au profil</a>
-
 {% endblock %}

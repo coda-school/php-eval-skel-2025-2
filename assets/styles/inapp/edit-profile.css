@@ -1,0 +1,327 @@
+/* --- LAYOUT GLOBAL (GRID 3 COLONNES) --- */
+.profile-grid-wrapper {
+    display: grid;
+    /* 1fr (données) | 900px max (formulaire) | 1fr (données) */
+    grid-template-columns: 1fr minmax(auto, 900px) 1fr;
+    width: 100%;
+    min-height: 100vh;
+    align-items: start;
+    background: #ffffff;
+}
+
+/* --- ZONE CENTRALE (CARTE) --- */
+.profile-container {
+    grid-column: 2;
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- SÉPARATEURS (LES ZONES DE DATA) --- */
+.vertical-separator {
+    width: 100%;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around; /* Répartit les colonnes de texte */
+    user-select: none;
+    pointer-events: none; /* Pour ne pas gêner si on clique à côté */
+}
+
+.side-left { grid-column: 1; }
+.side-right { grid-column: 3; }
+
+/* Conteneur des colonnes de texte */
+.v-ticker-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* Chaque colonne individuelle */
+.v-ticker-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Le texte qui défile */
+.v-ticker-item {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: #10b981; /* Ton vert primaire */
+    opacity: 0.8;  /* Très léger comme convenu */
+    padding-bottom: 50px;
+    white-space: nowrap;
+    animation: marquee-vertical 20s linear infinite;
+}
+
+/* Désynchronisation des vitesses et opacités */
+.v-ticker-column:nth-child(2n) .v-ticker-item { animation-duration: 25s; opacity: 0.8; }
+.v-ticker-column:nth-child(3n) .v-ticker-item { animation-duration: 15s; opacity: 0.8; }
+
+/* Inversion pour la droite */
+.side-right .v-ticker-item {
+    animation-direction: reverse;
+}
+
+/* --- ANIMATION --- */
+@keyframes marquee-vertical {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* Effet de fondu en haut et en bas pour que les data ne "coupent" pas sec */
+.vertical-separator::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        #ffffff 0%,
+        transparent 15%,
+        transparent 85%,
+        #ffffff 100%
+    );
+}
+
+/* --- 1. CARTE CENTRALE (REPRISE DE LA DA PROFIL) --- */
+.profile-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-left: 5px solid #10b981;
+    padding: 2.5rem;
+    position: relative;
+    background-image: radial-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 0);
+    background-size: 20px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #10b981;
+    padding-bottom: 1rem;
+}
+
+.terminal-title {
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0;
+}
+
+.terminal-title .highlight {
+    background: #10b981;
+    color: #ffffff;
+    padding: 2px 10px;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+/* --- 2. STYLE DES CHAMPS GÉNÉRÉS PAR SYMFONY --- */
+.form-body > div {
+    margin-bottom: 2rem; /* Espacement entre les blocs de champs */
+}
+
+.form-body label {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #10b981;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 0.8rem;
+    margin-top: 2rem;
+    text-transform: uppercase;
+}
+
+/* On cible les inputs et textareas générés par form_widget */
+.form-body input,
+.form-body textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 3px solid #10b981;
+    padding: 12px 15px;
+    font-family: 'Courier New', monospace;
+    color: #444;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-body input:focus,
+.form-body textarea:focus {
+    background: #ffffff;
+    border-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+}
+
+.form-body textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* --- 3. BOUTONS ET ACTIONS --- */
+.profile-footer-actions {
+    display: flex;
+    justify-content: flex-end; /* Aligné à droite */
+    gap: 20px;
+}
+
+.action-btn-mini {
+    text-decoration: none;
+    color: #999;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    transition: all 0.2s;
+}
+
+.action-btn-mini:hover {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.deploy-btn {
+    background: transparent;
+    border: 1px solid #059669;
+    color: #059669;
+    padding: 10px 25px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.deploy-btn:hover {
+    background: #059669;
+    color: #ffffff;
+}
+
+
+/*------------------------*/
+/*------------------------*/
+/*------------------------*/
+/* --- TERMINAL DE DÉPLOIEMENT (ZONE DE TRANSIT) --- */
+.deployment-terminal {
+    margin-top: 3rem;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    font-family: 'Courier New', monospace;
+}
+
+.terminal-header {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 5px 15px;
+}
+
+.terminal-tab {
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 2px;
+}
+
+.terminal-window {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.log-row {
+    font-size: 0.85rem;
+    color: #444;
+    opacity: 0;
+    transform: translateY(5px);
+    animation: fadeInStep 0.5s forwards;
+}
+
+.log-prefix {
+    color: #10b981;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+}
+
+/* --- LES JAUGES --- */
+.progress-bar {
+    width: 250px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #10b981;
+    width: 0;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: forwards;
+    animation-duration: 1.5s;
+}
+
+/* Animations de remplissage spécifiques */
+@keyframes fill90 { from { width: 0; } to { width: 100%; } }
+@keyframes fill60 { from { width: 0; } to { width: 100%; } }
+@keyframes fill100 { from { width: 0; } to { width: 100%; } }
+@keyframes fill40 { from { width: 0; } to { width: 100%; } }
+
+.fill-90 { animation-name: fill90; }
+.fill-60 { animation-name: fill60; }
+.fill-100 { animation-name: fill100; }
+.fill-40 { animation-name: fill40; }
+
+/* --- MESSAGE FINAL --- */
+.final-msg {
+    margin-top: 1rem;
+    color: #10b981;
+    font-weight: bold;
+    text-align: center;
+    border: 1px dashed rgba(16, 185, 129, 0.4);
+    padding: 12px;
+    opacity: 0;
+    animation: fadeInStep 0.5s forwards;
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+}
+
+/* --- TIMING DES APPARITIONS --- */
+.delay-1 { animation-delay: 0.5s; }
+.delay-1 .progress-fill { animation-delay: 0.8s; }
+
+.delay-2 { animation-delay: 2.2s; }
+.delay-2 .progress-fill { animation-delay: 2.5s; }
+
+.delay-3 { animation-delay: 3.9s; }
+.delay-3 .progress-fill { animation-delay: 4.2s; }
+
+.delay-4 { animation-delay: 5.6s; }
+.delay-4 .progress-fill { animation-delay: 5.9s; }
+
+.delay-5 { animation-delay: 7.2s; }
+
+/* --- KEYFRAMES --- */
+@keyframes fadeInStep {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.blink-fast {
+    animation: blink 0.4s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
