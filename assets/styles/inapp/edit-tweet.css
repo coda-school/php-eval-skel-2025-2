@@ -1,3 +1,217 @@
+/* --- CONFIGURATION GRID (COPIE CONFORME PROFIL) --- */
+.edit-grid-wrapper {
+    display: grid;
+    /* 3 colonnes : vide (1fr), centre (900px max), vide (1fr) */
+    grid-template-columns: 1fr minmax(auto, 900px) 1fr;
+    width: 100%;
+    min-height: 100vh;
+    align-items: start;
+    background: #ffffff;
+}
+
+/* --- LE CONTENEUR CENTRAL --- */
+.edit-main-card {
+    grid-column: 2; /* Centrage chirurgical */
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* --- STYLE DES SÉPARATEURS (TICKERS DÉSYNCHRONISÉS) --- */
+/* --- STYLE DES SÉPARATEURS ÉLARGIS --- */
+.vertical-separator {
+    /* Suppression de width: 60px */
+    width: 100%;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    /* Répartit les 5 colonnes de texte uniformément dans le vide */
+    justify-content: space-around;
+    user-select: none;
+}
+
+.side-left { grid-column: 1; }
+.side-right { grid-column: 3; }
+
+.v-ticker-wrap {
+    display: flex;
+    /* On change l'orientation pour mettre les colonnes côte à côte */
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* On crée une classe pour chaque colonne verticale de texte */
+.v-ticker-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-ticker-item {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem; /* Un peu plus petit pour le look "data" */
+    color: var(--primary-green);
+    opacity: 0.8; /* Très léger pour ne pas distraire */
+    padding-bottom: 50px;
+    white-space: nowrap;
+    animation: marquee-vertical 20s linear infinite;
+}
+
+/* On désynchronise les colonnes pour que ce soit moins rigide */
+.v-ticker-column:nth-child(2n) .v-ticker-item {
+    animation-duration: 25s;
+    opacity: 0.8;
+}
+
+.v-ticker-column:nth-child(3n) .v-ticker-item {
+    animation-duration: 15s;
+    opacity: 0.8;
+}
+
+/* Inversion du sens pour le côté droit pour le style */
+.side-right .v-ticker-item {
+    animation-direction: reverse;
+    opacity: 0.8; /* Encore plus discret à droite */
+}
+
+@keyframes marquee-vertical {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* --- STYLE DU FORMULAIRE (MODE ÉDITION TWEET - FIDÈLE AU SCREEN) --- */
+.terminal-form {
+    background: #ffffff;
+    /* Bordure verte épaisse fixe à gauche */
+    border-left: 5px solid #10b981;
+    padding: 2.5rem;
+    position: relative;
+    /* Look moniteur (points de fond) */
+    background-image: radial-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 0);
+    background-size: 24px 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.card-header h2 {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #333;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Préfixe SOURCE_ORIGIN comme sur l'écran */
+.card-header h2::before {
+    content: ">> SOURCE_ORIGIN: ";
+    opacity: 0.7;
+}
+
+.terminal-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 1rem 0;
+    font-family: 'Courier New', monospace;
+    /* Taille augmentée pour le corps du texte */
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #111;
+    outline: none;
+    resize: none;
+    min-height: 120px;
+}
+
+/* --- ACTIONS : ALIGNEMENT BIPOLAIRE (IMAGE GAUCHE / BOUTONS DROITE) --- */
+.form-actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between; /* Espace entre l'image et le bloc de validation */
+    align-items: center;
+}
+
+/* Groupe de gauche : Upload Visuel */
+.image-upload-zone {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.deploy-btn {
+    display: inline-block;
+    border: 1px solid #ddd;
+    color: #666;
+    padding: 6px 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.deploy-btn:hover {
+    border-color: #10b981;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.02);
+}
+
+/* Groupe de droite : Boutons groupés */
+.action-right-group {
+    display: flex;
+    gap: 12px; /* Espace réduit entre les deux boutons de validation */
+}
+
+.save-btn {
+    background: transparent;
+    border: 1px solid #10b981;
+    color: #10b981;
+    padding: 8px 20px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.save-btn:hover {
+    background: #10b981;
+    color: #ffffff;
+}
+
+.cancel-btn {
+    text-decoration: none;
+    border: 1px solid #ef4444; /* Rouge type DELETE */
+    color: #ef4444;
+    padding: 8px 20px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* --- RÈGLES DE TA COLLÈGUE (CONSERVÉES & LIÉES) --- */
 .input-file-hidden {
     display: none !important;
 }
@@ -6,9 +220,12 @@
     margin: 0.5rem 0 0 0;
     color: #ef4444;
     font-size: 0.85rem;
+    list-style: none;
 }
 
-#file-name-display{
+#file-name-display {
     margin-left: 10px;
-    color: var(--primary-green);
+    color: #10b981;
+    font-family: 'Courier New', monospace;
 }
+
