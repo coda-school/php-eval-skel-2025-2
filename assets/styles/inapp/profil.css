@@ -1,0 +1,354 @@
+/* --- LAYOUT MIS À JOUR --- */
+.profile-grid-wrapper {
+    display: grid;
+    /* On utilise 3 colonnes : le vide (1fr), le centre (900px), le vide (1fr) */
+    grid-template-columns: 1fr minmax(auto, 900px) 1fr;
+    width: 100%;
+    min-height: 100vh;
+    align-items: start;
+    background: #ffffff;
+}
+
+.profile-container {
+    grid-column: 2; /* On le place au milieu */
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    /*border-left: 1px solid rgba(0, 0, 0, 0.03);*/
+    /*border-right: 1px solid rgba(0, 0, 0, 0.03);*/
+}
+
+/* --- STYLE DES SÉPARATEURS ÉLARGIS --- */
+.vertical-separator {
+    /* Suppression de width: 60px */
+    width: 100%;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    /* Répartit les 5 colonnes de texte uniformément dans le vide */
+    justify-content: space-around;
+    user-select: none;
+}
+
+.side-left { grid-column: 1; }
+.side-right { grid-column: 3; }
+
+.v-ticker-wrap {
+    display: flex;
+    /* On change l'orientation pour mettre les colonnes côte à côte */
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* On crée une classe pour chaque colonne verticale de texte */
+.v-ticker-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-ticker-item {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem; /* Un peu plus petit pour le look "data" */
+    color: var(--primary-green);
+    opacity: 0.8; /* Très léger pour ne pas distraire */
+    padding-bottom: 50px;
+    white-space: nowrap;
+    animation: marquee-vertical 20s linear infinite;
+}
+
+/* On désynchronise les colonnes pour que ce soit moins rigide */
+.v-ticker-column:nth-child(2n) .v-ticker-item {
+    animation-duration: 25s;
+    opacity: 0.8;
+}
+
+.v-ticker-column:nth-child(3n) .v-ticker-item {
+    animation-duration: 15s;
+    opacity: 0.8;
+}
+
+/* Inversion du sens pour le côté droit pour le style */
+.side-right .v-ticker-item {
+    animation-direction: reverse;
+    opacity: 0.8; /* Encore plus discret à droite */
+}
+
+@keyframes marquee-vertical {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* --- 1. CARTE USER_DATA (STYLE SYSTÈME) --- */
+.profile-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-left: 5px solid var(--primary-green);
+    padding: 2.5rem;
+    position: relative;
+    background-image: radial-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 0);
+    background-size: 20px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--primary-green);
+    padding-bottom: 1rem;
+}
+
+.header-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.terminal-title {
+    font-family: 'Courier New', monospace;
+    font-size: 1.25rem !important;
+    margin: 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.terminal-title .highlight {
+    background: var(--primary-green);
+    color: #ffffff;
+    padding: 2px 10px;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+.profile-bio {
+    margin: 2rem 0;
+}
+
+.label {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: var(--primary-green);
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.bio-text {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.02);
+    padding: 1.5rem;
+    border-radius: 2px;
+}
+
+/* --- 2. CARROUSELS (NETWORK) --- */
+.social-management {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding: 1rem 0;
+}
+
+.carousel-section {
+    width: 100%;
+}
+
+.horizontal-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 15px 5px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-green) rgba(0,0,0,0.05);
+}
+
+.horizontal-carousel::-webkit-scrollbar { height: 4px; }
+.horizontal-carousel::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); }
+.horizontal-carousel::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 2px; }
+
+.user-mini-card {
+    flex: 0 0 auto;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-left: 3px solid var(--secondary-green);
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.85rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+}
+
+.user-mini-card:hover {
+    background: var(--primary-green);
+    color: #ffffff;
+    border-left-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.user-prefix {
+    color: var(--primary-green);
+    margin-right: 6px;
+    font-size: 1rem;
+}
+
+/* --- 3. TWEETS & FEED (UNIFORMISÉS AVEC LA HOME) --- */
+.user-tweets {
+    border-top: 1px dashed #ddd;
+    padding-top: 2rem;
+}
+
+.tweet-card {
+    background: #ffffff;
+    border-left: 3px solid #eee; /* Bordure neutre par défaut */
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tweet-card:hover {
+    border-left-color: var(--primary-green); /* Focus vert au survol */
+    background: rgba(16, 185, 129, 0.02);
+    transform: translateX(5px);
+}
+
+.tweet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.author-name {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.author-name:hover { color: var(--primary-green); }
+
+.tweet-date {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.tweet-body {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #444;
+    margin-bottom: 1.2rem;
+    white-space: pre-wrap; /* Pour respecter les retours à la ligne du tweet */
+}
+
+.tweet-footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 1rem;
+}
+
+.action-btn {
+    text-decoration: none;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.is-liked { color: var(--primary-green); font-weight: bold; }
+
+.detail-link {
+    text-decoration: none;
+    color: var(--secondary-green);
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* --- GESTION DES IMAGES DANS LES TWEETS --- */
+.tweet-image-wrapper {
+    margin-top: 1rem;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.tweet-content-image {
+    display: block;
+    max-width: 100%;
+    max-height: 450px;
+    height: auto;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.image-overlay-scan {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+}
+
+/* --- 4. COMPOSANTS INTERACTIFS --- */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.action-btn-mini {
+    background: transparent;
+    border: 1px solid #ddd;
+    color: #888;
+    padding: 5px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.profile-footer-actions .deploy-btn {
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid var(--secondary-green);
+    color: var(--secondary-green);
+    padding: 10px 25px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.profile-footer-actions .deploy-btn:hover {
+    background: var(--secondary-green);
+    color: #ffffff;
+}
+
+.empty-msg {
+    font-family: 'Courier New', monospace;
+    color: #bbb;
+    padding: 1rem;
+    border: 1px dashed #eee;
+}
