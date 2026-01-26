@@ -95,4 +95,4 @@ make clean
 
 ## Contributor
 
-Auteur : @CDasse
+Auteur : @CDassé / @Jean-Nicolas21 / @croussey10
