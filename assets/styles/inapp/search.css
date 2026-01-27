@@ -1,0 +1,236 @@
+/* --- CONFIGURATION GRID (3 COLONNES) --- */
+.search-grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr minmax(auto, 900px) 1fr;
+    width: 100%;
+    min-height: 100vh;
+    align-items: start;
+    background: #ffffff;
+}
+
+/* --- LE CONTENEUR CENTRAL --- */
+.search-results-container {
+    grid-column: 2;
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- TICKERS VERTICAUX (GAUCHE & DROITE) --- */
+.vertical-separator {
+    width: 100%;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+    user-select: none;
+    opacity: 0.8;
+}
+
+.side-left { grid-column: 1; }
+.side-right { grid-column: 3; }
+
+.v-ticker-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.v-ticker-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-ticker-item {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: #10b981; /* Ton vert primaire */
+    padding-bottom: 50px;
+    white-space: nowrap;
+    animation: marquee-vertical 25s linear infinite;
+}
+
+@keyframes marquee-vertical {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* --- HEADER DE LA PAGE --- */
+.card-header {
+    border-bottom: 2px solid #10b981;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.card-header h2 {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    color: #111;
+    letter-spacing: 2px;
+}
+
+/* --- CARTES DE TWEETS --- */
+.tweet-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #ddd;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: all 0.2s ease;
+    /* Petit motif pointillé discret en fond */
+    background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+    background-size: 20px 20px;
+}
+
+.tweet-card:hover {
+    border-left-color: #10b981;
+    box-shadow: 5px 5px 0px rgba(16, 185, 129, 0.05);
+    transform: translateX(5px);
+}
+
+.tweet-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-family: 'Courier New', monospace;
+}
+
+.author-tag {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    /*font-size: 0.9rem;*/
+}
+
+.author-tag:hover{
+    color: #10b981;
+}
+
+.timestamp {
+    color: #999;
+    font-size: 0.75rem;
+}
+
+.tweet-content {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #222;
+    margin-bottom: 1.5rem;
+}
+
+/* --- ACTIONS (LIKE & DETAIL) --- */
+.tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    padding-top: 1rem;
+}
+
+.like-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', monospace;
+}
+
+.like-btn {
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+.like-btn.is-liked {
+    color: #10b981;
+}
+
+.detail-link {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: #065F46;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+}
+
+/*.detail-link:hover {*/
+/*    color: #10b981;*/
+/*    border-color: #10b981;*/
+/*}*/
+
+/* --- ALERT VIDE --- */
+.terminal-alert {
+    padding: 3rem;
+    border: 1px dashed #ef4444;
+    color: #ef4444;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+/* --- CONTENEUR DE L'IMAGE DANS LE TWEET --- */
+.tweet-image-wrapper {
+    position: relative;
+    margin: 1.5rem 0 1rem 0; /* Espace sous le message */
+    border: 1px solid rgba(16, 185, 129, 0.2); /* Bordure verte légère */
+    background: #000; /* Fond noir pour que l'image ressorte "écran" */
+    overflow: hidden;
+
+    /* Tes contraintes spécifiques */
+    max-width: 100%;
+    max-height: 300px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tweet-content-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain; /* Garde les proportions sans couper */
+    display: block;
+    opacity: 0.9; /* Un peu moins lumineuse pour le style terminal */
+    transition: all 0.3s ease;
+}
+
+/* --- EFFET OVERLAY SCAN (LOOK MONITEUR) --- */
+/*.image-overlay-scan {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    !* Simule les lignes de scan d'un vieil écran *!*/
+/*    background: linear-gradient(*/
+/*        rgba(18, 16, 16, 0) 50%,*/
+/*        rgba(0, 0, 0, 0.1) 50%*/
+/*    ),*/
+/*    linear-gradient(*/
+/*        90deg,*/
+/*        rgba(255, 0, 0, 0.03),*/
+/*        rgba(0, 255, 0, 0.01),*/
+/*        rgba(0, 0, 255, 0.03)*/
+/*    );*/
+/*    background-size: 100% 3px, 3px 100%;*/
+/*    pointer-events: none; !* Laisse passer le clic/hover sur l'image *!*/
+/*}*/
+
+/*!* Animation au survol du tweet pour "réveiller" l'image *!*/
+/*.tweet-card:hover .tweet-content-image {*/
+/*    opacity: 1;*/
+/*    filter: contrast(1.1) brightness(1.1);*/
+/*}*/
+
+/*.tweet-card:hover .tweet-image-wrapper {*/
+/*    border-color: #10b981; !* La bordure s'illumine au hover *!*/
+/*}*/
