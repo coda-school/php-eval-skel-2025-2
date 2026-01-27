@@ -503,3 +503,8 @@
     pointer-events: none;
 }
 
+/* On cache la checkbox pour supprimer l'image */
+[id$="_removeImage"],
+label[for$="_removeImage"] {
+    display: none !important;
+}
