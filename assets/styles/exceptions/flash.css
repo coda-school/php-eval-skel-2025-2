@@ -1,0 +1,57 @@
+/* --- CONFIGURATION DES MESSAGES FLASH --- */
+.content-wrapper {
+    position: relative; /* Référentiel pour le positionnement absolu */
+}
+
+.flash-wrapper {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    z-index: 9999; /* Par-dessus tout */
+    pointer-events: none; /* Pour cliquer à travers le conteneur vide */
+}
+
+.alert {
+    pointer-events: auto; /* On réactive le clic sur l'alerte elle-même */
+    margin-top: 10px;
+    padding: 12px 20px;
+    border: 1px solid;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    animation: alertDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.alert-success {
+    border-left: 5px solid #10b981;
+    color: #065f46;
+    background-color: rgba(209, 250, 229, 0.95);
+}
+
+.alert-danger {
+    border-left: 5px solid #ef4444;
+    color: #991b1b;
+    background-color: rgba(254, 226, 226, 0.95);
+}
+
+.alert-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 5px;
+}
+
+@keyframes alertDrop {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
