@@ -116,6 +116,8 @@ Chaque message affiche également le nombre total de like qu'il a obtenu.
 Nous avons ajouté un bouton "ajouter une image" lors de la création d'un message. Les extensions autorisées sont png, jpg, jpeg, gif et la taille maximale autorisée est de 1024k.
 Lors de la modification de son message, l'utilisateur à l'oportunité de modifier l'image, la supprimer ou en ajouter une s'il n'y en avait pas.
 
+
+## Diagramme Mermaid
 ## Utilisation de l'IA
 
 Nous avons utiliser l'IA a **deux reprises** :
