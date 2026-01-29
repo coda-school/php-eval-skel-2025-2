@@ -118,6 +118,9 @@ Lors de la modification de son message, l'utilisateur à l'oportunité de modifi
 
 
 ## Diagramme Mermaid
+
+![Diagramme Mermaid](Mermaid/mermaid-diagram.png)
+
 ## Utilisation de l'IA
 
 Nous avons utiliser l'IA a **deux reprises** :
