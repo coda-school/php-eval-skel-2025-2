@@ -129,4 +129,5 @@ Nous avons utiliser l'IA a **deux reprises** :
 
 ## Contributor
 
-**Auteur** : @CDassé / @Jean-Nicolas21 / @croussey10
+**Auteurs** : @CDassé / @Jean-Nicolas21 / @croussey10
+
