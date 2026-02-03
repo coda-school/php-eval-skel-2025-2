@@ -9,8 +9,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Formulaire de modification du profil utilisateur.
+ * * Permet à l'utilisateur de mettre à jour ses informations personnelles
+ * telles que son nom d'affichage et sa biographie.
+ * * @package App\Form
+ */
 class UserType extends AbstractType
 {
+    /**
+     * Construit le formulaire de profil.
+     * * @param FormBuilderInterface $builder Le constructeur de formulaire.
+     * @param array $options Les options de configuration du formulaire.
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -32,6 +44,11 @@ class UserType extends AbstractType
         ;
     }
 
+    /**
+     * Configure les options de base pour ce type de formulaire.
+     * * @param OptionsResolver $resolver Le résolveur d'options.
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

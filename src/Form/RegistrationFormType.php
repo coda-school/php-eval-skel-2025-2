@@ -14,10 +14,23 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Classe de formulaire pour l'inscription des utilisateurs.
+ * * Ce formulaire gère la création de compte en incluant les validations de sécurité
+ * pour le nom d'utilisateur, l'email et le mot de passe.
+ * * @package App\Form
+ */
+
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /**
+         * Construit le formulaire d'inscription.
+         * * @param FormBuilderInterface $builder Le constructeur de formulaire.
+         * @param array $options Un tableau d'options de configuration.
+         * @return void
+         */
         $builder
             ->add('username', TextType::class, [
                 'constraints' => [
@@ -70,6 +83,12 @@ class RegistrationFormType extends AbstractType
         ;
     }
 
+    /**
+     * Configure les options par défaut pour ce formulaire.
+     * * Définit notamment la classe de données liée (User::class).
+     * * @param OptionsResolver $resolver Le résolveur d'options.
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

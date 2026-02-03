@@ -13,8 +13,20 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Formulaire de création ou d'édition d'un Tweet.
+ * * Ce type gère le texte du message, l'upload d'une image ainsi que
+ * l'option de suppression de l'image existante via un DTO.
+ * * @package App\Form
+ */
 class TweetType extends AbstractType
 {
+    /**
+     * Construit les champs du formulaire Tweet.
+     * * @param FormBuilderInterface $builder Le constructeur de formulaire.
+     * @param array $options Les options de configuration.
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -53,6 +65,13 @@ class TweetType extends AbstractType
         ;
     }
 
+    /**
+     * Configure les options du formulaire.
+     * * Lie ce formulaire à la classe TweetDTO pour faciliter le transport
+     * et la validation des données collectées.
+     * * @param OptionsResolver $resolver Le résolveur d'options.
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
