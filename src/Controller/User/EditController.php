@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EditController extends AbstractController
 {
+    /**
+     * Affiche et traite le formulaire de modification du profil utilisateur.
+     *
+     * @param User $user L'entité utilisateur à modifier (chargée via le username dans l'URL)
+     * @param UserService $userService Service gérant la logique de persistance des utilisateurs
+     * @param Request $request L'objet requête pour la gestion des formulaires
+     * * @return Response Le rendu de la page d'édition ou une redirection après traitement
+     */
     #[Route('/user/{username}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function index(
         #[MapEntity(mapping: ['username' => 'username'])]
@@ -38,6 +46,7 @@ final class EditController extends AbstractController
             return $this->redirectToRoute('user_show', ['username' => $connectedUser->getUsername()]);
         }
 
+        // --- GESTION DU FORMULAIRE DE PROFIL ---
         $dtoUser = UserDTO::fromEntity($user);
         $form = $this->createForm(UserType::class, $dtoUser);
         $form->handleRequest($request);

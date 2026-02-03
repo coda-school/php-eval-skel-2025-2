@@ -11,6 +11,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DeleteController extends AbstractController
 {
+    /**
+     * Supprime un tweet de la base de données après avoir vérifié
+     * que l'utilisateur connecté en est bien l'auteur.
+     *
+     * @param Tweets $tweets L'entité Tweet à supprimer (mappée via l'UID dans l'URL)
+     * @param TweetsService $tweetsService Le service gérant la logique de suppression (fichiers et data)
+     * * @return Response Une redirection vers la liste des tweets ou vers le tweet en cas d'erreur de droits
+     */
     #[Route('/tweets/{uid}/delete', name: 'tweets_delete', methods: ['GET'])]
     public function index(
         #[MapEntity(mapping: ['uid' => 'uid'])]

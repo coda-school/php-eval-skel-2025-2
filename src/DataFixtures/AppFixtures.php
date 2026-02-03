@@ -11,6 +11,14 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Classe de génération de données factices (Fixtures).
+ * * Permet de peupler la base de données avec un jeu d'essai complet comprenant :
+ * - Des utilisateurs avec mots de passe hachés.
+ * - Des tweets avec gestion aléatoire d'images réelles.
+ * - Des relations d'abonnement (Follows).
+ * - Des interactions (Likes).
+ */
 class AppFixtures extends Fixture
 {
     private array $generatedUsers = [];
@@ -24,6 +32,11 @@ class AppFixtures extends Fixture
         $this->hasher = $hasher;
     }
 
+    /**
+     * Méthode principale chargeant les données en base.
+     * * @param ObjectManager $manager
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
@@ -88,6 +101,14 @@ class AppFixtures extends Fixture
         $this->manager->flush();
     }
 
+    /**
+     * Crée et persiste une entité User.
+     * * @param string $username Nom d'utilisateur
+     * @param string $email Adresse email
+     * @param string $password Mot de passe en clair (sera haché)
+     * @param string $bio Biographie de l'utilisateur
+     * @return User L'utilisateur persisté
+     */
     private function generateUser(string $username, string $email, string $password, string $bio): User
     {
         $user = new User();
@@ -101,6 +122,11 @@ class AppFixtures extends Fixture
         return $user;
     }
 
+    /**
+     * Crée un tweet avec une image aléatoire si disponible.
+     * * @param string $message Le contenu du tweet
+     * @return Tweets Le tweet persisté
+     */
     public function generateTweets(string $message): Tweets
     {
         $tweet = new Tweets();
@@ -130,6 +156,11 @@ class AppFixtures extends Fixture
         return $tweet;
     }
 
+    /**
+     * Génère des abonnements aléatoires pour un utilisateur donné.
+     * * @param User $follower L'utilisateur qui va suivre les autres
+     * @return void
+     */
     private function generateFollows(User $follower): void
     {
         $potentialFollowed = array_filter($this->generatedUsers, fn($u) => $u !== $follower);
@@ -147,6 +178,11 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * Génère entre 3 et 8 likes aléatoires pour un utilisateur.
+     * * @param User $user L'utilisateur qui effectue les likes
+     * @return void
+     */
     private function generateLikes(User $user): void
     {
         // On mélange les tweets pour chaque utilisateur

@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EditController extends AbstractController
 {
+    /**
+     * Affiche et traite le formulaire de modification d'un tweet.
+     *
+     * @param Request $request L'objet requête pour intercepter les soumissions de formulaires
+     * @param Tweets $tweets L'entité Tweet chargée automatiquement via l'UID dans l'URL
+     * @param TweetsService $tweetsService Le service gérant l'upload et la mise à jour des tweets
+     * * @return Response Le rendu de la vue d'édition ou une redirection après succès/erreur
+     */
     #[Route('/tweets/{uid}/edit', name: 'tweets_edit', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
@@ -45,6 +53,7 @@ final class EditController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imgFile = $form->get('image')->getData();
 
+            // Logique de gestion de l'image (Upload, Suppression ou Conservation)
             if ($imgFile) {
                 $imgFileName = $tweetsService->upload($imgFile);
                 $dto->image = $imgFileName;

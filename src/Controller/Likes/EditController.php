@@ -12,6 +12,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EditController extends AbstractController
 {
+    /**
+     * Alterne l'état du "Like" (ajout/suppression) pour un tweet donné
+     * par l'utilisateur connecté, puis redirige vers la page d'origine.
+     *
+     * @param Tweets $tweet L'entité Tweet ciblée (mappée via son UID dans l'URL)
+     * @param Request $request L'objet requête utilisé pour extraire le referer HTTP
+     * @param LikesService $likesService Le service gérant la persistance des mentions "J'aime"
+     * * @return Response Une redirection vers la page précédente (referer)
+     */
     #[Route('/likes/{tweet_uid}/edit', name: 'likes_edit')]
     public function index(
         #[MapEntity(mapping: ["tweet_uid" => "uid"])]

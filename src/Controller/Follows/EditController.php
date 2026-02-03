@@ -12,6 +12,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EditController extends AbstractController
 {
+    /**
+     * Alterne l'état d'abonnement (follow/unfollow) entre l'utilisateur connecté
+     * et l'utilisateur cible, puis redirige vers la page précédente.
+     *
+     * @param User $user L'utilisateur cible à suivre ou ne plus suivre (mappé via son username)
+     * @param Request $request L'objet requête pour récupérer les informations d'en-tête (HTTP Referer)
+     * @param FollowsService $followsService Le service gérant la logique métier des abonnements
+     * * @return Response Une redirection vers la page d'où provient l'utilisateur
+     */
     #[Route('/follows/{name}/edit', name: 'follows_edit')]
     public function index(
         #[MapEntity(mapping: ["name" => "username"])]

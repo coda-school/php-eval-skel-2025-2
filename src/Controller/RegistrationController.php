@@ -13,6 +13,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+    /**
+     * Traite le formulaire d'inscription, hache le mot de passe et persiste
+     * le nouvel utilisateur en base de données.
+     *
+     * @param Request $request L'objet requête pour intercepter les données du formulaire
+     * @param UserPasswordHasherInterface $userPasswordHasher Le service de hachage sécurisé de Symfony
+     * @param EntityManagerInterface $entityManager L'interface de Doctrine pour la persistance
+     * * @return Response Le rendu du formulaire ou une redirection vers la connexion en cas de succès
+     */
     #[Route('/register', name: 'register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {

@@ -13,6 +13,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SearchController extends AbstractController
 {
+    /**
+     * Affiche les résultats de recherche basés sur une chaîne de caractères
+     * et gère la soumission du formulaire de recherche présent dans la vue.
+     *
+     * @param Request $request L'objet requête pour intercepter les données de formulaire
+     * @param LikesService $likesService Le service pour vérifier l'état des "likes" sur les résultats
+     * @param TweetsService $tweetsService Le service pour effectuer la recherche en base de données
+     * @param string $search Le terme de recherche récupéré directement depuis l'URL (Query Parameter)
+     * * @return Response Le rendu de la page de résultats ou une redirection vers une nouvelle recherche
+     */
     #[Route('/tweets/search', name: 'search_tweets', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
@@ -30,8 +40,10 @@ final class SearchController extends AbstractController
         }
 
         $connectedUser = $this->getUser();
+        // Récupération de la liste des tweets correspondant au terme de recherche
         $listTweets = $tweetsService->searchTweets($search);
 
+        // Enrichissement des données pour savoir si l'utilisateur connecté a aimé chaque tweet trouvé
         foreach ($listTweets as $key => $tweet) {
             $isLiked = $likesService->findIfUserLikeTweet($connectedUser, $tweet['id']);
             $listTweets[$key]['isLikedByMe'] = ($isLiked !== null);
